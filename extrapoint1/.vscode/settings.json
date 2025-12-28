@@ -1,0 +1,9 @@
+{
+    "files.associations": {
+        "touchpanel.h": "c",
+        "stdlib.h": "c",
+        "timer.h": "c",
+        "glcd.h": "c",
+        "rit.h": "c"
+    }
+}

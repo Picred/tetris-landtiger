@@ -1,0 +1,30 @@
+																			 /*********************************************************************************************************
+**--------------File Info---------------------------------------------------------------------------------
+** File name:           joystick.h
+** Last modified Date:  2018-12-30
+** Last Version:        V1.00
+** Descriptions:        Prototypes of functions included in the lib_joystick, funct_joystick .c files
+** Correlated files:    lib_joystick.c, funct_joystick.c
+**--------------------------------------------------------------------------------------------------------       
+*********************************************************************************************************/
+#include "stdint.h"
+
+#define JOYSTICK_UP 29
+#define JOYSTICK_DOWN 26
+#define JOYSTICK_LEFT 27
+#define JOYSTICK_RIGHT 28
+#define JOYSTICK_PRESS 25
+
+#define FLAG_JOYSTICK_UP 1
+#define FLAG_JOYSTICK_DOWN 2
+#define FLAG_JOYSTICK_LEFT 4
+#define FLAG_JOYSTICK_RIGHT 8
+#define FLAG_JOYSTICK_SELECT 16
+
+/* lib_joystick */
+void joystick_init(void);
+
+/* funct_joystick */
+void joystick_On (unsigned int num);
+
+int joystick_check_dir(uint32_t dir);
