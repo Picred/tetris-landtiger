@@ -92,7 +92,8 @@ void RIT_IRQHandler(void){
 		}
 	}
 	else pressed_joystick_right = 0;
-	
+    
+    
 	// -------------------------------
 	// JOYSTICK SELECT
 	// -------------------------------
