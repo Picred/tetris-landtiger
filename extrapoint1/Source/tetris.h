@@ -97,4 +97,4 @@ void init_game_field();
 void draw_tetromino(Tetromino_t tetromino);
 void redraw_game_field();
 void clear_line(int row);
-void fill_rect(int x, int y, int width, int height, uint16_t color);
+void draw_rect(int x, int y, int width, int height, uint16_t color);
