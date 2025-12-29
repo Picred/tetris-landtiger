@@ -10,7 +10,7 @@ volatile int actual_score = 0;
 volatile int total_lines = 0;
 volatile Tetromino_t falling_tetromino;
 volatile bool game_paused = true;
-volatile int colors[7] = {Cyan, Yellow, Magenta, Green, Red, Orange, Blue2};
+volatile int colors[19] = {Cyan, Yellow, Magenta, Green, Red, Orange, Blue2, Cyan, Magenta, Magenta, Magenta, Green, Red, Orange, Orange, Orange, Blue2, Blue2, Blue2 };
 
 volatile char move_requested = MOVE_NONE;
 uint16_t game_grid[GRID_ROWS][GRID_COLS] = {0};
@@ -274,7 +274,7 @@ void draw_tetromino(Tetromino_t tetromino) {
 // spec4
 Tetromino_t generate_tetromino(){
     Tetromino_t new_tetromino;
-    new_tetromino.shape = rand() % 7;
+    new_tetromino.shape = rand() % 19;
     // new_tetromino.shape = TET_S;
     
 
@@ -404,23 +404,23 @@ void clear_line(int row) {
     redraw_partial_field(row); 
 }
 
-void redraw_game_field() {
-    int i, j;
-    for (i = 0; i < GRID_ROWS; i++) {
-        for (j = 0; j < GRID_COLS; j++) {
-            int x = GAME_FIELD_LEFTX_LIMIT + (j * TETROMINO_UNIT_BLOCK_SIZE);
-            int y = GAME_FIELD_UPY_LIMIT + (i * TETROMINO_UNIT_BLOCK_SIZE);
+// void redraw_game_field() {
+//     int i, j;
+//     for (i = 0; i < GRID_ROWS; i++) {
+//         for (j = 0; j < GRID_COLS; j++) {
+//             int x = GAME_FIELD_LEFTX_LIMIT + (j * TETROMINO_UNIT_BLOCK_SIZE);
+//             int y = GAME_FIELD_UPY_LIMIT + (i * TETROMINO_UNIT_BLOCK_SIZE);
 
-            uint16_t color = game_grid[i][j];
+//             uint16_t color = game_grid[i][j];
 
-            if (color != 0)
-                draw_block(x, y, color, Black); // HERE
-            else 
-                draw_rect(x, y, TETROMINO_UNIT_BLOCK_SIZE, TETROMINO_UNIT_BLOCK_SIZE, Black);
+//             if (color != 0)
+//                 draw_block(x, y, color, Black); // HERE
+//             else 
+//                 draw_rect(x, y, TETROMINO_UNIT_BLOCK_SIZE, TETROMINO_UNIT_BLOCK_SIZE, Black);
             
-        }
-    }
-}
+//         }
+//     }
+// }
 
 
 void draw_rect(int x, int y, int width, int height, uint16_t color) {
