@@ -77,8 +77,7 @@ void print_or_delete_paused_text(){
 	else
 		backround_color = Black;
 	
-    GUI_Text(GAME_FIELD_RIGHTX_LIMIT + 4*GAME_FIELD_EDGE_SIZE, (GAME_FIELD_HEIGTH / 2) + 2*TETROMINO_UNIT_BLOCK_SIZE, (uint8_t*)paused_text, Black, backround_color);
-
+    GUI_Text(PAUSED_TEXT_XPOS, PAUSED_TEXT_YPOS, (uint8_t*)paused_text, Orange, backround_color);
 }
 
 
@@ -86,27 +85,27 @@ void init_leaderboard(){
     int y_pos = SCORE_YPOS;
     char text[256];
     sprintf(text, "TOP:");
-    GUI_Text(SCORE_XPOS, SCORE_YPOS, (uint8_t*)text, White, Black);
+    GUI_Text(SCORE_XPOS, SCORE_YPOS, (uint8_t*)text, Blue2, Black);
 
-    sprintf(text, "%d", 0000000);
+    sprintf(text, "%d", 0);
     y_pos += TEXT_WHITE_VERTICAL_SPACE;
     GUI_Text(SCORE_XPOS, y_pos, (uint8_t*)text, White, Black);
 
 
     sprintf(text, "SCORE:");
     y_pos += TEXT_WHITE_VERTICAL_SPACE;
-    GUI_Text(SCORE_XPOS, y_pos, (uint8_t*)text, White, Black);
+    GUI_Text(SCORE_XPOS, y_pos, (uint8_t*)text, Blue2, Black);
 
-    sprintf(text, "%d", 0000000);
+    sprintf(text, "%d", 0);
     y_pos += TEXT_WHITE_VERTICAL_SPACE;
     GUI_Text(SCORE_XPOS, y_pos, (uint8_t*)text, White, Black);
 
 
     sprintf(text, "LINES:");
     y_pos += TEXT_WHITE_VERTICAL_SPACE;
-    GUI_Text(SCORE_XPOS, y_pos, (uint8_t*)text, White, Black);
+    GUI_Text(SCORE_XPOS, y_pos, (uint8_t*)text, Blue2, Black);
 
-    sprintf(text, "%d", 0000);
+    sprintf(text, "%d", 0);
     y_pos += TEXT_WHITE_VERTICAL_SPACE;
     GUI_Text(SCORE_XPOS, y_pos, (uint8_t*)text, White, Black);
 }
