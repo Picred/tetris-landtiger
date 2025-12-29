@@ -274,8 +274,8 @@ void draw_tetromino(Tetromino_t tetromino) {
 // spec4
 Tetromino_t generate_tetromino(){
     Tetromino_t new_tetromino;
-    new_tetromino.shape = rand() % 19;
-    // new_tetromino.shape = TET_S;
+    // new_tetromino.shape = rand() % 19;
+    new_tetromino.shape = TET_I_90;
     
 
     new_tetromino.color = colors[new_tetromino.shape];
@@ -351,22 +351,39 @@ void lock_tetromino(Tetromino_t tet) {
 
 void check_and_clear_lines() {
     int i, j, num_blocks;
+    int total_cleared_lines = 0;
+    int total_bonus = 0;
     for (i = GRID_ROWS - 1; i >= 0; i--) {
         num_blocks = 0;
         for (j = 0; j < GRID_COLS; j++) {
             if (game_grid[i][j] != 0) num_blocks++;
         }
-        
+
         if (num_blocks == GRID_COLS) { // riga completa, tutte le colonne "contate"
             clear_line(i);
             i++; // Ricontrolla la stessa riga (perché quella sopra è scesa)
-            
+
             // Aggiorna punteggio
-            add_total_lines(1);
-            set_actual_score(get_actual_score() + 100);
-            update_leaderboard();
+            // set_actual_score(get_actual_score() + 100);
+            // update_leaderboard();
+            total_cleared_lines++;
         }
     }
+    if (total_cleared_lines == 4){
+        total_bonus = TETRIS_BONUS;
+        print_screen(PAUSED_TEXT_XPOS, PAUSED_TEXT_YPOS + TEXT_WHITE_VERTICAL_SPACE, "!TETRIS!", Orange, Black);
+        print_screen(PAUSED_TEXT_XPOS, PAUSED_TEXT_YPOS + TEXT_WHITE_VERTICAL_SPACE, "!TETRIS!", Black, Black);
+        print_screen(PAUSED_TEXT_XPOS, PAUSED_TEXT_YPOS + TEXT_WHITE_VERTICAL_SPACE, "!TETRIS!", Orange, Black);
+        print_screen(PAUSED_TEXT_XPOS, PAUSED_TEXT_YPOS + TEXT_WHITE_VERTICAL_SPACE, "!TETRIS!", Black, Black);
+        print_screen(PAUSED_TEXT_XPOS, PAUSED_TEXT_YPOS + TEXT_WHITE_VERTICAL_SPACE, "!TETRIS!", Orange, Black);
+        print_screen(PAUSED_TEXT_XPOS, PAUSED_TEXT_YPOS + TEXT_WHITE_VERTICAL_SPACE, "!TETRIS!", Black, Black);
+    }
+    else if (total_cleared_lines > 0)
+        total_bonus = 100 * total_cleared_lines;
+
+    set_actual_score(get_actual_score() + total_bonus);
+    add_total_lines(total_cleared_lines);
+    update_leaderboard();
 }
 
 
