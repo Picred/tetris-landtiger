@@ -5,7 +5,7 @@
 
 volatile int y_axis = 0;
 extern volatile int colors[];
-extern volatile Tetraminoe_t falling_tetraminoe;
+extern volatile Tetromino_t falling_tetromino;
 extern volatile bool game_paused;
 
 

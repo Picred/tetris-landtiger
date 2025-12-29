@@ -8,12 +8,12 @@
 volatile int top_score = 0;
 volatile int actual_score = 0;
 volatile int total_lines = 0;
-volatile Tetraminoe_t falling_tetraminoe;
+volatile Tetromino_t falling_tetromino;
 volatile bool game_paused = true; // spec2
 
 uint16_t game_grid[GRID_ROWS][GRID_COLS] = {0};
 
-const uint8_t tetraminoes[7][4][4] ={ // spec3
+const uint8_t tetrominos[7][4][4] ={ // spec3
     // I
 	{
 		{1,1,1,1},
@@ -201,46 +201,46 @@ void draw_block(int x, int y, short color, short border_color) {
 }
 
 
-void draw_tetraminoe(Tetraminoe_t tetraminoe) {
+void draw_tetromino(Tetromino_t tetromino) {
     int i, j;
     for (j = 0; j < 4; j++) {
         for (i = 0; i < 4; i++) {
             
-            if (tetraminoes[tetraminoe.shape][j][i]) { // Se nella matrice 4x4 c'è un pezzo (1), lo disegno
-                int draw_x = tetraminoe.pos_x + (i * TETRAMINOE_UNIT_BLOCK_SIZE);
-                int draw_y = tetraminoe.pos_y + (j * TETRAMINOE_UNIT_BLOCK_SIZE);
+            if (tetrominos[tetromino.shape][j][i]) { // Se nella matrice 4x4 c'è un pezzo (1), lo disegno
+                int draw_x = tetromino.pos_x + (i * TETRAMINOE_UNIT_BLOCK_SIZE);
+                int draw_y = tetromino.pos_y + (j * TETRAMINOE_UNIT_BLOCK_SIZE);
 
-                draw_block(draw_x, draw_y, tetraminoe.color, tetraminoe.border);
+                draw_block(draw_x, draw_y, tetromino.color, tetromino.border);
             }
         }
     }
 }
 
 // spec4
-Tetraminoe_t generate_tetraminoe(){
-    Tetraminoe_t new_tetraminoe;
-    new_tetraminoe.shape = rand() % 7;
+Tetromino_t generate_tetromino(){
+    Tetromino_t new_tetromino;
+    new_tetromino.shape = rand() % 7;
     int colors[7] = {Cyan, Yellow, Magenta, Green, Red, Orange, Blue2};
 
-    new_tetraminoe.color = colors[new_tetraminoe.shape];
-    new_tetraminoe.pos_x = SPAWN_POINTX;
+    new_tetromino.color = colors[new_tetromino.shape];
+    new_tetromino.pos_x = SPAWN_POINTX;
 
-    if (new_tetraminoe.shape == TET_I)
-        new_tetraminoe.pos_x -= TETRAMINOE_UNIT_BLOCK_SIZE;
+    if (new_tetromino.shape == TET_I)
+        new_tetromino.pos_x -= TETRAMINOE_UNIT_BLOCK_SIZE;
 
-    new_tetraminoe.pos_y = SPAWN_POINTY;
-    new_tetraminoe.border = Black;
-    new_tetraminoe.is_falling = true;
+    new_tetromino.pos_y = SPAWN_POINTY;
+    new_tetromino.border = Black;
+    new_tetromino.is_falling = true;
 
-    if(check_collision(new_tetraminoe, new_tetraminoe.pos_x, new_tetraminoe.pos_y)){
+    if(check_collision(new_tetromino, new_tetromino.pos_x, new_tetromino.pos_y)){
         disable_timer(1);
     }
-    return new_tetraminoe;
+    return new_tetromino;
 }
 
 // non usat
-bool is_falling_tetraminoe(Tetraminoe_t tetraminoe){
-    return tetraminoe.is_falling;
+bool is_falling_tetromino(Tetromino_t tetromino){
+    return tetromino.is_falling;
 }
 
 
@@ -259,11 +259,11 @@ void print_screen(uint16_t Xpos, uint16_t Ypos, char* str, uint16_t color, uint1
 
 
 //logic
-bool check_collision(Tetraminoe_t tet, int new_x, int new_y) {
+bool check_collision(Tetromino_t tet, int new_x, int new_y) {
     int i, j;
     for (j = 0; j < 4; j++) {
         for (i = 0; i < 4; i++) {
-            if (tetraminoes[tet.shape][j][i]) {
+            if (tetrominos[tet.shape][j][i]) {
                 // Trasforma coordinate pixel in indici matrice
                 int grid_x = (new_x - GAME_FIELD_LEFTX_LIMIT) / TETRAMINOE_UNIT_BLOCK_SIZE + i;
                 int grid_y = (new_y - GAME_FIELD_UPY_LIMIT) / TETRAMINOE_UNIT_BLOCK_SIZE + j;
@@ -284,11 +284,11 @@ bool check_collision(Tetraminoe_t tet, int new_x, int new_y) {
 }
 
 
-void lock_tetraminoe(Tetraminoe_t tet) {
+void lock_tetromino(Tetromino_t tet) {
     int i, j;
     for (j = 0; j < 4; j++) {
         for (i = 0; i < 4; i++) {
-            if (tetraminoes[tet.shape][j][i]) {
+            if (tetrominos[tet.shape][j][i]) {
                 int grid_x = (tet.pos_x - GAME_FIELD_LEFTX_LIMIT) / TETRAMINOE_UNIT_BLOCK_SIZE + i;
                 int grid_y = (tet.pos_y - GAME_FIELD_UPY_LIMIT) / TETRAMINOE_UNIT_BLOCK_SIZE + j;
 
@@ -376,11 +376,11 @@ void fill_rect(int x, int y, int width, int height, uint16_t color) {
 }
 
 
-void delete_tetraminoe(Tetraminoe_t tet) {
+void delete_tetromino(Tetromino_t tet) {
     int i, j;
     for (j = 0; j < 4; j++) {
         for (i = 0; i < 4; i++) {
-            if (tetraminoes[tet.shape][j][i]) {
+            if (tetrominos[tet.shape][j][i]) {
                 int draw_x = tet.pos_x + (i * TETRAMINOE_UNIT_BLOCK_SIZE);
                 int draw_y = tet.pos_y + (j * TETRAMINOE_UNIT_BLOCK_SIZE);
 
@@ -391,18 +391,18 @@ void delete_tetraminoe(Tetraminoe_t tet) {
 }
 
 void perform_game_tick() {
-    delete_tetraminoe(falling_tetraminoe);
-    int next_y = falling_tetraminoe.pos_y + TETRAMINOE_UNIT_BLOCK_SIZE; //spec5
+    delete_tetromino(falling_tetromino);
+    int next_y = falling_tetromino.pos_y + TETRAMINOE_UNIT_BLOCK_SIZE; //spec5
 
-    if (!check_collision(falling_tetraminoe, falling_tetraminoe.pos_x, next_y)) {
-        falling_tetraminoe.pos_y = next_y;
+    if (!check_collision(falling_tetromino, falling_tetromino.pos_x, next_y)) {
+        falling_tetromino.pos_y = next_y;
     } else {
-        draw_tetraminoe(falling_tetraminoe);
-        lock_tetraminoe(falling_tetraminoe);
+        draw_tetromino(falling_tetromino);
+        lock_tetromino(falling_tetromino);
         check_and_clear_lines();
-        falling_tetraminoe = generate_tetraminoe();
+        falling_tetromino = generate_tetromino();
         // Game over con il pezzo appena creato?
     }
 
-    draw_tetraminoe(falling_tetraminoe);
+    draw_tetromino(falling_tetromino);
 }

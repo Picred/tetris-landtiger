@@ -10,7 +10,7 @@
 
 
 
-extern volatile Tetraminoe_t falling_tetraminoe;
+extern volatile Tetromino_t falling_tetromino;
 extern volatile int top_score;
 extern volatile int actual_score;
 extern volatile int total_lines;
@@ -48,7 +48,7 @@ extern uint8_t ScaleFlag; // <- ScaleFlag needs to visible in order for the emul
     
 	print_or_delete_paused_text();
 
-    falling_tetraminoe = generate_tetraminoe();
+    falling_tetromino = generate_tetromino();
 	enable_timer(1);
 
     

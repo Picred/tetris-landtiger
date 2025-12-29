@@ -27,7 +27,7 @@ volatile uint8_t joystick_flag = 0;
 volatile uint8_t btn_flag = 0;
 
 extern volatile bool game_paused;
-extern volatile Tetraminoe_t falling_tetraminoe;
+extern volatile Tetromino_t falling_tetromino;
 
 
 void RIT_IRQHandler(void){	
@@ -66,10 +66,10 @@ void RIT_IRQHandler(void){
 		pressed_joystick_left++;
 		if(pressed_joystick_left == 1) {
 			// code
-            int next_x = falling_tetraminoe.pos_x - TETRAMINOE_UNIT_BLOCK_SIZE;
+            int next_x = falling_tetromino.pos_x - TETRAMINOE_UNIT_BLOCK_SIZE;
 
-            if(!check_collision(falling_tetraminoe, falling_tetraminoe.pos_x, next_x))
-                falling_tetraminoe.pos_x = next_x;
+            if(!check_collision(falling_tetromino, falling_tetromino.pos_x, next_x))
+                falling_tetromino.pos_x = next_x;
             
 			joystick_flag |= FLAG_JOYSTICK_LEFT;
 		}
@@ -84,10 +84,10 @@ void RIT_IRQHandler(void){
 		pressed_joystick_right++;
 		if(pressed_joystick_right == 1) {
 			// MY code here :)
-			int next_x = falling_tetraminoe.pos_x + TETRAMINOE_UNIT_BLOCK_SIZE;
+			int next_x = falling_tetromino.pos_x + TETRAMINOE_UNIT_BLOCK_SIZE;
 
-            if(!check_collision(falling_tetraminoe, falling_tetraminoe.pos_x, next_x))
-                falling_tetraminoe.pos_x = next_x;
+            if(!check_collision(falling_tetromino, falling_tetromino.pos_x, next_x))
+                falling_tetromino.pos_x = next_x;
 			joystick_flag |= FLAG_JOYSTICK_RIGHT;
 		}
 	}
