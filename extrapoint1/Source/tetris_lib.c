@@ -77,7 +77,7 @@ void print_or_delete_paused_text(){
 	else
 		backround_color = Black;
 	
-    GUI_Text(GAME_FIELD_RIGHTX_LIMIT + 4*GAME_FIELD_EDGE_SIZE, (GAME_FIELD_HEIGTH / 2) + 2*TETRAMINOE_UNIT_BLOCK_SIZE, (uint8_t*)paused_text, Black, backround_color);
+    GUI_Text(GAME_FIELD_RIGHTX_LIMIT + 4*GAME_FIELD_EDGE_SIZE, (GAME_FIELD_HEIGTH / 2) + 2*TETROMINO_UNIT_BLOCK_SIZE, (uint8_t*)paused_text, Black, backround_color);
 
 }
 
@@ -190,14 +190,14 @@ void init_game_field() {
 void draw_block(int x, int y, short color, short border_color) {
     int i;
     // riempimento linee orizzontali per tutta l'altezza del blocco
-    for (i = 0; i < TETRAMINOE_UNIT_BLOCK_SIZE; i++)
-        LCD_DrawLine(x, y + i, x + TETRAMINOE_UNIT_BLOCK_SIZE - 1, y + i, color);
+    for (i = 0; i < TETROMINO_UNIT_BLOCK_SIZE; i++)
+        LCD_DrawLine(x, y + i, x + TETROMINO_UNIT_BLOCK_SIZE - 1, y + i, color);
 
     //bordo rettangolo vuoto sopra il riempimento
-    LCD_DrawLine(x, y, x + TETRAMINOE_UNIT_BLOCK_SIZE - 1, y, border_color); // up
-    LCD_DrawLine(x, y + TETRAMINOE_UNIT_BLOCK_SIZE - 1, x + TETRAMINOE_UNIT_BLOCK_SIZE - 1, y + TETRAMINOE_UNIT_BLOCK_SIZE - 1, border_color); // down
-    LCD_DrawLine(x, y, x, y + TETRAMINOE_UNIT_BLOCK_SIZE - 1, border_color); // sx
-    LCD_DrawLine(x + TETRAMINOE_UNIT_BLOCK_SIZE - 1, y, x + TETRAMINOE_UNIT_BLOCK_SIZE - 1, y + TETRAMINOE_UNIT_BLOCK_SIZE - 1, border_color); // dx
+    LCD_DrawLine(x, y, x + TETROMINO_UNIT_BLOCK_SIZE - 1, y, border_color); // up
+    LCD_DrawLine(x, y + TETROMINO_UNIT_BLOCK_SIZE - 1, x + TETROMINO_UNIT_BLOCK_SIZE - 1, y + TETROMINO_UNIT_BLOCK_SIZE - 1, border_color); // down
+    LCD_DrawLine(x, y, x, y + TETROMINO_UNIT_BLOCK_SIZE - 1, border_color); // sx
+    LCD_DrawLine(x + TETROMINO_UNIT_BLOCK_SIZE - 1, y, x + TETROMINO_UNIT_BLOCK_SIZE - 1, y + TETROMINO_UNIT_BLOCK_SIZE - 1, border_color); // dx
 }
 
 
@@ -207,8 +207,8 @@ void draw_tetromino(Tetromino_t tetromino) {
         for (i = 0; i < 4; i++) {
             
             if (tetrominoes[tetromino.shape][j][i]) { // Se nella matrice 4x4 c'è un pezzo (1), lo disegno
-                int draw_x = tetromino.pos_x + (i * TETRAMINOE_UNIT_BLOCK_SIZE);
-                int draw_y = tetromino.pos_y + (j * TETRAMINOE_UNIT_BLOCK_SIZE);
+                int draw_x = tetromino.pos_x + (i * TETROMINO_UNIT_BLOCK_SIZE);
+                int draw_y = tetromino.pos_y + (j * TETROMINO_UNIT_BLOCK_SIZE);
 
                 draw_block(draw_x, draw_y, tetromino.color, tetromino.border);
             }
@@ -226,7 +226,7 @@ Tetromino_t generate_tetromino(){
     new_tetromino.pos_x = SPAWN_POINTX;
 
     if (new_tetromino.shape == TET_I)
-        new_tetromino.pos_x -= TETRAMINOE_UNIT_BLOCK_SIZE;
+        new_tetromino.pos_x -= TETROMINO_UNIT_BLOCK_SIZE;
 
     new_tetromino.pos_y = SPAWN_POINTY;
     new_tetromino.border = Black;
@@ -265,8 +265,8 @@ bool check_collision(Tetromino_t tet, int new_x, int new_y) {
         for (i = 0; i < 4; i++) {
             if (tetrominoes[tet.shape][j][i]) {
                 // Trasforma coordinate pixel in indici matrice
-                int grid_x = (new_x - GAME_FIELD_LEFTX_LIMIT) / TETRAMINOE_UNIT_BLOCK_SIZE + i;
-                int grid_y = (new_y - GAME_FIELD_UPY_LIMIT) / TETRAMINOE_UNIT_BLOCK_SIZE + j;
+                int grid_x = (new_x - GAME_FIELD_LEFTX_LIMIT) / TETROMINO_UNIT_BLOCK_SIZE + i;
+                int grid_y = (new_y - GAME_FIELD_UPY_LIMIT) / TETROMINO_UNIT_BLOCK_SIZE + j;
 
                 // 1. Controlla i bordi del campo (X e Y)
                 if (grid_x < 0 || grid_x >= GRID_COLS || grid_y >= GRID_ROWS) {
@@ -289,8 +289,8 @@ void lock_tetromino(Tetromino_t tet) {
     for (j = 0; j < 4; j++) {
         for (i = 0; i < 4; i++) {
             if (tetrominoes[tet.shape][j][i]) {
-                int grid_x = (tet.pos_x - GAME_FIELD_LEFTX_LIMIT) / TETRAMINOE_UNIT_BLOCK_SIZE + i;
-                int grid_y = (tet.pos_y - GAME_FIELD_UPY_LIMIT) / TETRAMINOE_UNIT_BLOCK_SIZE + j;
+                int grid_x = (tet.pos_x - GAME_FIELD_LEFTX_LIMIT) / TETROMINO_UNIT_BLOCK_SIZE + i;
+                int grid_y = (tet.pos_y - GAME_FIELD_UPY_LIMIT) / TETROMINO_UNIT_BLOCK_SIZE + j;
 
                 if (grid_y >= 0 && grid_y < GRID_ROWS) {
                     game_grid[grid_y][grid_x] = tet.color;
@@ -349,8 +349,8 @@ void redraw_game_field() {
     for (r = 0; r < GRID_ROWS; r++) {
         for (c = 0; c < GRID_COLS; c++) {
             // Calcola la posizione pixel del blocco
-            int x = GAME_FIELD_LEFTX_LIMIT + (c * TETRAMINOE_UNIT_BLOCK_SIZE);
-            int y = GAME_FIELD_UPY_LIMIT + (r * TETRAMINOE_UNIT_BLOCK_SIZE);
+            int x = GAME_FIELD_LEFTX_LIMIT + (c * TETROMINO_UNIT_BLOCK_SIZE);
+            int y = GAME_FIELD_UPY_LIMIT + (r * TETROMINO_UNIT_BLOCK_SIZE);
             
             uint16_t color = game_grid[r][c];
             
@@ -361,7 +361,7 @@ void redraw_game_field() {
             } else {
                 // Se è vuoto, disegna un quadrato nero per "cancellare" vecchi residui
                 // (Assicurati che draw_block gestisca bene il riempimento)
-                fill_rect(x, y, TETRAMINOE_UNIT_BLOCK_SIZE, TETRAMINOE_UNIT_BLOCK_SIZE, Black);
+                fill_rect(x, y, TETROMINO_UNIT_BLOCK_SIZE, TETROMINO_UNIT_BLOCK_SIZE, Black);
             }
         }
     }
@@ -381,10 +381,10 @@ void delete_tetromino(Tetromino_t tet) {
     for (j = 0; j < 4; j++) {
         for (i = 0; i < 4; i++) {
             if (tetrominoes[tet.shape][j][i]) {
-                int draw_x = tet.pos_x + (i * TETRAMINOE_UNIT_BLOCK_SIZE);
-                int draw_y = tet.pos_y + (j * TETRAMINOE_UNIT_BLOCK_SIZE);
+                int draw_x = tet.pos_x + (i * TETROMINO_UNIT_BLOCK_SIZE);
+                int draw_y = tet.pos_y + (j * TETROMINO_UNIT_BLOCK_SIZE);
 
-                fill_rect(draw_x, draw_y, TETRAMINOE_UNIT_BLOCK_SIZE, TETRAMINOE_UNIT_BLOCK_SIZE, Black);
+                fill_rect(draw_x, draw_y, TETROMINO_UNIT_BLOCK_SIZE, TETROMINO_UNIT_BLOCK_SIZE, Black);
             }
         }
     }
@@ -392,7 +392,7 @@ void delete_tetromino(Tetromino_t tet) {
 
 void perform_game_tick() {
     delete_tetromino(falling_tetromino);
-    int next_y = falling_tetromino.pos_y + TETRAMINOE_UNIT_BLOCK_SIZE; //spec5
+    int next_y = falling_tetromino.pos_y + TETROMINO_UNIT_BLOCK_SIZE; //spec5
 
     if (!check_collision(falling_tetromino, falling_tetromino.pos_x, next_y)) {
         falling_tetromino.pos_y = next_y;

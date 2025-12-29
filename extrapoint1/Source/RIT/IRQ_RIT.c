@@ -66,7 +66,7 @@ void RIT_IRQHandler(void){
 		pressed_joystick_left++;
 		if(pressed_joystick_left == 1) {
 			// code
-            int next_x = falling_tetromino.pos_x - TETRAMINOE_UNIT_BLOCK_SIZE;
+            int next_x = falling_tetromino.pos_x - TETROMINO_UNIT_BLOCK_SIZE;
 
             if(!check_collision(falling_tetromino, falling_tetromino.pos_x, next_x))
                 falling_tetromino.pos_x = next_x;
@@ -84,7 +84,7 @@ void RIT_IRQHandler(void){
 		pressed_joystick_right++;
 		if(pressed_joystick_right == 1) {
 			// MY code here :)
-			int next_x = falling_tetromino.pos_x + TETRAMINOE_UNIT_BLOCK_SIZE;
+			int next_x = falling_tetromino.pos_x + TETROMINO_UNIT_BLOCK_SIZE;
 
             if(!check_collision(falling_tetromino, falling_tetromino.pos_x, next_x))
                 falling_tetromino.pos_x = next_x;
@@ -202,14 +202,15 @@ void RIT_IRQHandler(void){
             pressed_button_1 = 0;
 			NVIC_EnableIRQ(EINT1_IRQn);
 			LPC_PINCON->PINSEL4 |= (1 << 22);
-		} else {
-			if(pressed_button_1 >= LONG_PRESS_COUNT){
-				// long press
-				btn_flag |= FLAG_BUTTON_1_LONG;
-				pressed_button_1 = 0;
-			}
-			pressed_button_1++;
-		}
+		} 
+		// else {
+		// 	if(pressed_button_1 >= LONG_PRESS_COUNT){
+		// 		// long press
+		// 		btn_flag |= FLAG_BUTTON_1_LONG;
+		// 		pressed_button_1 = 0;
+		// 	}
+		// 	pressed_button_1++;
+		// }
 	}
 
 	// -------------------------------
