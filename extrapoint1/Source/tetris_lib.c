@@ -13,7 +13,7 @@ volatile bool game_paused = true; // spec2
 
 uint16_t game_grid[GRID_ROWS][GRID_COLS] = {0};
 
-const uint8_t tetrominos[7][4][4] ={ // spec3
+const uint8_t tetrominoes[7][4][4] ={ // spec3
     // I
 	{
 		{1,1,1,1},
@@ -206,7 +206,7 @@ void draw_tetromino(Tetromino_t tetromino) {
     for (j = 0; j < 4; j++) {
         for (i = 0; i < 4; i++) {
             
-            if (tetrominos[tetromino.shape][j][i]) { // Se nella matrice 4x4 c'è un pezzo (1), lo disegno
+            if (tetrominoes[tetromino.shape][j][i]) { // Se nella matrice 4x4 c'è un pezzo (1), lo disegno
                 int draw_x = tetromino.pos_x + (i * TETRAMINOE_UNIT_BLOCK_SIZE);
                 int draw_y = tetromino.pos_y + (j * TETRAMINOE_UNIT_BLOCK_SIZE);
 
@@ -263,7 +263,7 @@ bool check_collision(Tetromino_t tet, int new_x, int new_y) {
     int i, j;
     for (j = 0; j < 4; j++) {
         for (i = 0; i < 4; i++) {
-            if (tetrominos[tet.shape][j][i]) {
+            if (tetrominoes[tet.shape][j][i]) {
                 // Trasforma coordinate pixel in indici matrice
                 int grid_x = (new_x - GAME_FIELD_LEFTX_LIMIT) / TETRAMINOE_UNIT_BLOCK_SIZE + i;
                 int grid_y = (new_y - GAME_FIELD_UPY_LIMIT) / TETRAMINOE_UNIT_BLOCK_SIZE + j;
@@ -288,7 +288,7 @@ void lock_tetromino(Tetromino_t tet) {
     int i, j;
     for (j = 0; j < 4; j++) {
         for (i = 0; i < 4; i++) {
-            if (tetrominos[tet.shape][j][i]) {
+            if (tetrominoes[tet.shape][j][i]) {
                 int grid_x = (tet.pos_x - GAME_FIELD_LEFTX_LIMIT) / TETRAMINOE_UNIT_BLOCK_SIZE + i;
                 int grid_y = (tet.pos_y - GAME_FIELD_UPY_LIMIT) / TETRAMINOE_UNIT_BLOCK_SIZE + j;
 
@@ -380,7 +380,7 @@ void delete_tetromino(Tetromino_t tet) {
     int i, j;
     for (j = 0; j < 4; j++) {
         for (i = 0; i < 4; i++) {
-            if (tetrominos[tet.shape][j][i]) {
+            if (tetrominoes[tet.shape][j][i]) {
                 int draw_x = tet.pos_x + (i * TETRAMINOE_UNIT_BLOCK_SIZE);
                 int draw_y = tet.pos_y + (j * TETRAMINOE_UNIT_BLOCK_SIZE);
 
