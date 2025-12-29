@@ -14,10 +14,9 @@ volatile int colors[7] = {Cyan, Yellow, Magenta, Green, Red, Orange, Blue2};
 
 volatile char move_requested = MOVE_NONE;
 uint16_t game_grid[GRID_ROWS][GRID_COLS] = {0};
-// volatile uint8_t FALLING_SPEED = 1;
 
 
-const uint8_t tetrominoes[][4][4] ={ // spec3
+const uint8_t tetrominoes[8][4][4] ={ // spec3
     // I
 	{
 		{1,1,1,1},
@@ -66,7 +65,15 @@ const uint8_t tetrominoes[][4][4] ={ // spec3
 		{0,1,0,0},
 		{1,1,0,0},
 		{0,0,0,0}
+	},
+    // I_90
+    {
+		{0,1,0,0},
+		{0,1,0,0},
+		{0,1,0,0},
+		{0,1,0,0}
 	}
+
 };
 
 
@@ -220,7 +227,7 @@ void draw_tetromino(Tetromino_t tetromino) {
 Tetromino_t generate_tetromino(){
     Tetromino_t new_tetromino;
     // new_tetromino.shape = rand() % 7;
-    new_tetromino.shape = TET_O;
+    new_tetromino.shape = TET_I;
     
 
     new_tetromino.color = colors[new_tetromino.shape];
@@ -299,7 +306,6 @@ void lock_tetromino(Tetromino_t tet) {
     }
     set_actual_score(get_actual_score() + 10);
     update_leaderboard();
-
 }
 
 void check_and_clear_lines() {
@@ -395,6 +401,30 @@ void delete_tetromino(Tetromino_t tet) {
     }
 }
 
+bool collision_detected_I_90(){
+    int i;
+    bool collision_detected = false;
+    for(i = -4; i < 5; i++){
+        collision_detected = check_collision(falling_tetromino, (falling_tetromino.pos_x + i)*TETROMINO_UNIT_BLOCK_SIZE, falling_tetromino.pos_y);
+        if(collision_detected)
+            break;
+    }
+    return collision_detected;
+}
+void rotate_falling_tetromino(){
+    switch (falling_tetromino.shape){
+        case TET_I:
+            falling_tetromino.shape = TET_I_90;
+            break;
+        case TET_I_90:
+            // check collision con pos_x +- TETROMINO_UNIT_BLOCK_SIZE perchè si deve girare orizzontalmente.
+            if(!collision_detected_I_90()){
+                falling_tetromino.shape = TET_I;
+            }
+            break;
+    }
+}
+
 void handle_user_input(){
     if (move_requested == MOVE_NONE || game_paused) return;
 
@@ -407,8 +437,12 @@ void handle_user_input(){
         case MOVE_RIGHT:
             next_x += TETROMINO_UNIT_BLOCK_SIZE;
             break;
-        case MOVE_DOWN:
+        case MOVE_DOWN: // soft drop
             falling_tetromino.drop_speed = SOFT_DROP_SPEED;
+            break;
+        case MOVE_UP: //rotate
+            delete_tetromino(falling_tetromino);
+            rotate_falling_tetromino();
             break;
     }
     

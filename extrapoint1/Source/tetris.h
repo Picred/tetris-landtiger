@@ -48,11 +48,13 @@
 #define TET_Z 4
 #define TET_L 5
 #define TET_J 6
+#define TET_I_90 7
 
 #define MOVE_LEFT 10
 #define MOVE_RIGHT 11
 #define MOVE_NONE 12
 #define MOVE_DOWN 13
+#define MOVE_UP 14
 
 #define NORMAL_DROP_SPEED 1 // 1 block per second
 #define SOFT_DROP_SPEED 2 // 2 blocks per second
@@ -76,6 +78,7 @@ void delete_tetromino(Tetromino_t tet);
 void check_and_clear_lines();
 bool check_collision(Tetromino_t tet, int new_x, int new_y);
 void lock_tetromino(Tetromino_t tet);
+void rotate_falling_tetromino();
 
 
 

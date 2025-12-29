@@ -37,8 +37,9 @@ void RIT_IRQHandler(void){
 	
 	if(joystick_check_dir(JOYSTICK_UP)){
 		pressed_joystick_up++;
-		if(pressed_joystick_up == 1) {
+		if(pressed_joystick_up >= 1) {
 			// MY code here :)
+			move_requested = MOVE_UP;
 			joystick_flag |= FLAG_JOYSTICK_UP;
 		}
 	}
@@ -50,7 +51,7 @@ void RIT_IRQHandler(void){
 	
 	if(joystick_check_dir(JOYSTICK_DOWN)){
 		pressed_joystick_down++;
-		if(pressed_joystick_down == 1) {
+		if(pressed_joystick_down >= 1) {
 			// MY code here :)
 			move_requested = MOVE_DOWN;
 			joystick_flag |= FLAG_JOYSTICK_DOWN;
