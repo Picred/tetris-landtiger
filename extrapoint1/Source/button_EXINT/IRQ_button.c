@@ -17,25 +17,25 @@ void EINT0_IRQHandler (void){
 
 
 // KEY1
-// void EINT1_IRQHandler (void){	  	
-// 	game_paused = !game_paused;
+void EINT1_IRQHandler (void){	  	
+	game_paused = !game_paused;
 	
-// 	print_or_delete_paused_text();
+	print_or_delete_paused_text();
 
-// 	/*NVIC_DisableIRQ(EINT1_IRQn);		/* disable Button interrupts */
-// 	/*LPC_PINCON->PINSEL4    &= ~(1 << 22);     /* GPIO pin selection */
-// 	/*down=1;
-// 	LPC_SC->EXTINT &= (1 << 1);     /* clear pending interrupt */
-// }
+	/*NVIC_DisableIRQ(EINT1_IRQn); */		/* disable Button interrupts */
+	// LPC_PINCON->PINSEL4    &= ~(1 << 22);     /* GPIO pin selection */
+	/*down=1; */
+	LPC_SC->EXTINT &= (1 << 1);     /* clear pending interrupt */
+}
 
 
 // KEY1 test RIT
-void EINT1_IRQHandler (void){
-    pressed_button_1 = 1;
-    NVIC_DisableIRQ(EINT1_IRQn);		/* disable Button interrupts */
-    LPC_PINCON->PINSEL4    &= ~(1 << 22);     /* GPIO pin selection */
-    LPC_SC->EXTINT &= (1 << 1);     /* clear pending interrupt */
-}
+// void EINT1_IRQHandler (void){
+//     pressed_button_1 = 1;
+//     NVIC_DisableIRQ(EINT1_IRQn);		/* disable Button interrupts */
+//     LPC_PINCON->PINSEL4    &= ~(1 << 22);     /* GPIO pin selection */
+//     LPC_SC->EXTINT &= (1 << 1);     /* clear pending interrupt */
+// }
 
 
 

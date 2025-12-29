@@ -20,7 +20,7 @@
 #define TOTAL_VERTICAL_BLOCKS 20 // spec1
 #define TOTAL_HORIZONTAL_BLOCKS 10 // spec1
 #define GAME_FIELD_EDGE_SIZE 5
-#define TETROMINO_UNIT_BLOCK_SIZE 15
+#define TETROMINO_UNIT_BLOCK_SIZE 15 // max 15, min 3
 
 #define GAME_FIELD_UPY_LIMIT GAME_FIELD_EDGE_SIZE
 #define GAME_FIELD_LEFTX_LIMIT GAME_FIELD_EDGE_SIZE
@@ -47,7 +47,11 @@
 #define TET_S 3
 #define TET_Z 4
 #define TET_L 5
-#define TET_J 6
+#define TET_J 
+
+#define MOVE_LEFT 10
+#define MOVE_RIGHT 11
+#define MOVE_NONE 12
 
 
 // TETROMINOS

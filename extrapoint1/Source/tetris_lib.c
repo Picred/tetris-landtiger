@@ -11,6 +11,7 @@ volatile int total_lines = 0;
 volatile Tetromino_t falling_tetromino;
 volatile bool game_paused = true; // spec2
 
+volatile char move_requested = MOVE_NONE;
 uint16_t game_grid[GRID_ROWS][GRID_COLS] = {0};
 
 const uint8_t tetrominoes[7][4][4] ={ // spec3
@@ -77,7 +78,7 @@ void print_or_delete_paused_text(){
 	else
 		backround_color = Black;
 	
-    GUI_Text(PAUSED_TEXT_XPOS, PAUSED_TEXT_YPOS, (uint8_t*)paused_text, Orange, backround_color);
+    GUI_Text(PAUSED_TEXT_XPOS, PAUSED_TEXT_YPOS, (uint8_t*)paused_text, Black, backround_color);
 }
 
 
@@ -224,7 +225,7 @@ Tetromino_t generate_tetromino(){
     new_tetromino.color = colors[new_tetromino.shape];
     new_tetromino.pos_x = SPAWN_POINTX;
 
-    if (new_tetromino.shape == TET_I)
+    if (new_tetromino.shape == TET_I) // align
         new_tetromino.pos_x -= TETROMINO_UNIT_BLOCK_SIZE;
 
     new_tetromino.pos_y = SPAWN_POINTY;
@@ -389,12 +390,35 @@ void delete_tetromino(Tetromino_t tet) {
     }
 }
 
+void handle_user_input(){
+    if (move_requested == MOVE_NONE || game_paused) return;
+
+    int next_x = falling_tetromino.pos_x;
+
+    if(move_requested == MOVE_LEFT)
+        next_x -= TETROMINO_UNIT_BLOCK_SIZE;
+    else if(move_requested == MOVE_RIGHT)
+        next_x += TETROMINO_UNIT_BLOCK_SIZE;
+
+    if(!check_collision(falling_tetromino, next_x, falling_tetromino.pos_y)){
+        delete_tetromino(falling_tetromino);
+        falling_tetromino.pos_x = next_x;
+        draw_tetromino(falling_tetromino);
+    }
+    move_requested = MOVE_NONE;
+}
+
+
+
 void perform_game_tick() {
+    handle_user_input();
+    
     delete_tetromino(falling_tetromino);
     int next_y = falling_tetromino.pos_y + TETROMINO_UNIT_BLOCK_SIZE; //spec5
-
+    
     if (!check_collision(falling_tetromino, falling_tetromino.pos_x, next_y)) {
         falling_tetromino.pos_y = next_y;
+        
     } else {
         draw_tetromino(falling_tetromino);
         lock_tetromino(falling_tetromino);
@@ -402,6 +426,7 @@ void perform_game_tick() {
         falling_tetromino = generate_tetromino();
         // Game over con il pezzo appena creato?
     }
-
+    
     draw_tetromino(falling_tetromino);
 }
+
