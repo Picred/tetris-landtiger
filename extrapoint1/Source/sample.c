@@ -42,7 +42,7 @@ int main(void) {
 
 	LCD_Clear(Black);
 
-	init_leaderboard();
+	update_leaderboard();
 	init_game_field();
 
 	print_or_delete_paused_text();

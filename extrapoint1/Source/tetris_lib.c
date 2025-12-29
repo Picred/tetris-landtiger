@@ -16,63 +16,140 @@ volatile char move_requested = MOVE_NONE;
 uint16_t game_grid[GRID_ROWS][GRID_COLS] = {0};
 
 
-const uint8_t tetrominoes[8][4][4] ={ // spec3
+const uint8_t tetrominoes[19][4][4] ={ // spec3
     // I
-	{
-		{1,1,1,1},
-		{0,0,0,0},
-		{0,0,0,0},
-		{0,0,0,0}
-	},
-	// O
-	{
-		{1,1,0,0},
-		{1,1,0,0},
-		{0,0,0,0},
-		{0,0,0,0}
-	},
-	// T
-	{
-		{1,1,1,0},
-		{0,1,0,0},
-		{0,0,0,0},
-		{0,0,0,0}
-	},
-	// S
-	{
-		{0,1,1,0},
-		{1,1,0,0},
-		{0,0,0,0},
-		{0,0,0,0}
-	},
-	// Z
-	{
-		{1,1,0,0},
-		{0,1,1,0},
-		{0,0,0,0},
-		{0,0,0,0}
-	},
-	// L
-	{
-		{1,0,0,0},
-		{1,0,0,0},
-		{1,1,0,0},
-		{0,0,0,0}
-	},
-	// J
-	{
-		{0,1,0,0},
-		{0,1,0,0},
-		{1,1,0,0},
-		{0,0,0,0}
-	},
+    {
+        {1,1,1,1},
+        {0,0,0,0},
+        {0,0,0,0},
+        {0,0,0,0}
+    },
+    // O
+    {
+        {1,1,0,0},
+        {1,1,0,0},
+        {0,0,0,0},
+        {0,0,0,0}
+    },
+    // T
+    {
+        {1,1,1,0},
+        {0,1,0,0},
+        {0,0,0,0},
+        {0,0,0,0}
+    },
+    // S
+    {
+        {0,1,1,0},
+        {1,1,0,0},
+        {0,0,0,0},
+        {0,0,0,0}
+    },
+    // Z
+    {
+        {1,1,0,0},
+        {0,1,1,0},
+        {0,0,0,0},
+        {0,0,0,0}
+    },
+    // L
+    {
+        {1,0,0,0},
+        {1,0,0,0},
+        {1,1,0,0},
+        {0,0,0,0}
+    },
+    // J
+    {
+        {0,1,0,0},
+        {0,1,0,0},
+        {1,1,0,0},
+        {0,0,0,0}
+    },
     // I_90
     {
-		{0,1,0,0},
-		{0,1,0,0},
-		{0,1,0,0},
-		{0,1,0,0}
-	}
+        {0,1,0,0},
+        {0,1,0,0},
+        {0,1,0,0},
+        {0,1,0,0}
+    },
+    // T_90
+    {
+        {0,1,0,0},
+        {1,1,0,0},
+        {0,1,0,0},
+        {0,0,0,0}
+    },
+    // T_180
+    {
+        {0,1,0,0},
+        {1,1,1,0},
+        {0,0,0,0},
+        {0,0,0,0}
+    },
+    // T_270
+    {
+        {1,0,0,0},
+        {1,1,0,0},
+        {1,0,0,0},
+        {0,0,0,0}
+    },
+    // S_90
+    {
+        {1,0,0,0},
+        {1,1,0,0},
+        {0,1,0,0},
+        {0,0,0,0}
+    },
+    // Z_90
+    {
+        {0,1,0,0},
+        {1,1,0,0},
+        {1,0,0,0},
+        {0,0,0,0}
+    },
+    // L_90
+    {
+        {1,1,1,0},
+        {1,0,0,0},
+        {0,0,0,0},
+        {0,0,0,0}
+    },
+    // L_180
+    {
+        {1,1,0,0},
+        {0,1,0,0},
+        {0,1,0,0},
+        {0,0,0,0}
+    },
+    // L_270
+    {
+        {0,0,1,0},
+        {1,1,1,0},
+        {0,0,0,0},
+        {0,0,0,0}
+    },
+    // J_90
+    {
+        {1,0,0,0},
+        {1,1,1,0},
+        {0,0,0,0},
+        {0,0,0,0}
+    },
+    // J_180
+    {
+        {1,1,0,0},
+        {1,0,0,0},
+        {1,0,0,0},
+        {0,0,0,0}
+    },
+    // J_270
+    {
+        {1,1,1,0},
+        {0,0,1,0},
+        {0,0,0,0},
+        {0,0,0,0}
+    }
 
 };
 
@@ -90,35 +167,6 @@ void print_or_delete_paused_text(){
     GUI_Text(PAUSED_TEXT_XPOS, PAUSED_TEXT_YPOS, (uint8_t*)paused_text, Black, backround_color);
 }
 
-
-void init_leaderboard(){
-    int y_pos = SCORE_YPOS;
-    char text[256];
-    sprintf(text, "TOP:");
-    GUI_Text(SCORE_XPOS, SCORE_YPOS, (uint8_t*)text, Blue2, Black);
-
-    sprintf(text, "%d", 0);
-    y_pos += TEXT_WHITE_VERTICAL_SPACE;
-    GUI_Text(SCORE_XPOS, y_pos, (uint8_t*)text, White, Black);
-
-
-    sprintf(text, "SCORE:");
-    y_pos += TEXT_WHITE_VERTICAL_SPACE;
-    GUI_Text(SCORE_XPOS, y_pos, (uint8_t*)text, Blue2, Black);
-
-    sprintf(text, "%d", 0);
-    y_pos += TEXT_WHITE_VERTICAL_SPACE;
-    GUI_Text(SCORE_XPOS, y_pos, (uint8_t*)text, White, Black);
-
-
-    sprintf(text, "LINES:");
-    y_pos += TEXT_WHITE_VERTICAL_SPACE;
-    GUI_Text(SCORE_XPOS, y_pos, (uint8_t*)text, Blue2, Black);
-
-    sprintf(text, "%d", 0);
-    y_pos += TEXT_WHITE_VERTICAL_SPACE;
-    GUI_Text(SCORE_XPOS, y_pos, (uint8_t*)text, White, Black);
-}
 
 void update_leaderboard(){
     int y_pos = SCORE_YPOS;
@@ -226,8 +274,8 @@ void draw_tetromino(Tetromino_t tetromino) {
 // spec4
 Tetromino_t generate_tetromino(){
     Tetromino_t new_tetromino;
-    // new_tetromino.shape = rand() % 7;
-    new_tetromino.shape = TET_I;
+    new_tetromino.shape = rand() % 7;
+    // new_tetromino.shape = TET_S;
     
 
     new_tetromino.color = colors[new_tetromino.shape];
@@ -249,13 +297,6 @@ Tetromino_t generate_tetromino(){
     return new_tetromino;
 }
 
-char get_drop_speed(Tetromino_t tetromino){
-    return tetromino.drop_speed;
-}
-
-char set_drop_speed(Tetromino_t tetromino, char new_speed){
-    return tetromino.drop_speed;
-}
 
 
 void print_screen(uint16_t Xpos, uint16_t Ypos, char* str, uint16_t color, uint16_t bkColor){
@@ -401,28 +442,59 @@ void delete_tetromino(Tetromino_t tet) {
     }
 }
 
-bool collision_detected_I_90(){
-    int i;
-    bool collision_detected = false;
-    for(i = -4; i < 5; i++){
-        collision_detected = check_collision(falling_tetromino, (falling_tetromino.pos_x + i)*TETROMINO_UNIT_BLOCK_SIZE, falling_tetromino.pos_y);
-        if(collision_detected)
-            break;
-    }
-    return collision_detected;
-}
 void rotate_falling_tetromino(){
-    switch (falling_tetromino.shape){
-        case TET_I:
-            falling_tetromino.shape = TET_I_90;
+    int original_shape = falling_tetromino.shape;
+    int next_shape = original_shape;
+
+    switch (original_shape){
+        // TET_I
+        case TET_I: next_shape = TET_I_90; 
             break;
-        case TET_I_90:
-            // check collision con pos_x +- TETROMINO_UNIT_BLOCK_SIZE perchè si deve girare orizzontalmente.
-            if(!collision_detected_I_90()){
-                falling_tetromino.shape = TET_I;
-            }
+        case TET_I_90: next_shape = TET_I;
             break;
+
+        case TET_T: next_shape = TET_T_90;
+            break;
+        case TET_T_90: next_shape = TET_T_180;
+            break;
+        case TET_T_180: next_shape = TET_T_270;
+            break;
+        case TET_T_270: next_shape = TET_T;
+            break;
+
+        case TET_S: next_shape = TET_S_90;
+            break;
+        case TET_S_90: next_shape = TET_S;
+            break;
+        case TET_Z: next_shape = TET_Z_90;
+            break;
+        case TET_Z_90: next_shape = TET_Z;
+            break;
+        
+        case TET_L: next_shape = TET_L_90;
+            break;
+        case TET_L_90: next_shape = TET_L_180;
+            break;
+        case TET_L_180: next_shape = TET_L_270;
+            break;
+        case TET_L_270: next_shape = TET_L;
+            break;
+
+        case TET_J: next_shape = TET_J_90;
+            break;
+        case TET_J_90: next_shape = TET_J_180;
+            break;
+        case TET_J_180: next_shape = TET_J_270;
+            break;
+        case TET_J_270: next_shape = TET_J;
+            break;
+        
     }
+
+    falling_tetromino.shape = next_shape;
+    if(check_collision(falling_tetromino, falling_tetromino.pos_x, falling_tetromino.pos_y))
+        falling_tetromino.shape = original_shape; // se collide la nuova forma, ritorna quella prima
+
 }
 
 void handle_user_input(){
@@ -443,6 +515,7 @@ void handle_user_input(){
         case MOVE_UP: //rotate
             delete_tetromino(falling_tetromino);
             rotate_falling_tetromino();
+            // draw_tetromino(falling_tetromino);
             break;
     }
     

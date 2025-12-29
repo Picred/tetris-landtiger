@@ -49,6 +49,17 @@
 #define TET_L 5
 #define TET_J 6
 #define TET_I_90 7
+#define TET_T_90 8
+#define TET_T_180 9
+#define TET_T_270 10
+#define TET_S_90 11
+#define TET_Z_90 12
+#define TET_L_90 13
+#define TET_L_180 14
+#define TET_L_270 15
+#define TET_J_90 16
+#define TET_J_180 17
+#define TET_J_270 18
 
 #define MOVE_LEFT 10
 #define MOVE_RIGHT 11
@@ -88,7 +99,6 @@ void print_or_delete_paused_text();
 
 
 /* LEADERBOARD*/
-void init_leaderboard();
 void update_leaderboard();
 int get_actual_score();
 int get_total_lines();
