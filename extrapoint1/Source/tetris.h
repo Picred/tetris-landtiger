@@ -47,12 +47,15 @@
 #define TET_S 3
 #define TET_Z 4
 #define TET_L 5
-#define TET_J 
+#define TET_J 6
 
 #define MOVE_LEFT 10
 #define MOVE_RIGHT 11
 #define MOVE_NONE 12
+#define MOVE_DOWN 13
 
+#define NORMAL_DROP_SPEED 1 // 1 block per second
+#define SOFT_DROP_SPEED 2 // 2 blocks per second
 
 // TETROMINOS
 typedef struct{
@@ -61,7 +64,7 @@ typedef struct{
     int pos_y;
     int color;
     int border;
-    bool is_falling;
+    char drop_speed;
 } Tetromino_t;
 
 

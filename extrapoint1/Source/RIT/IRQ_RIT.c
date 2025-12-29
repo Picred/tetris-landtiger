@@ -52,10 +52,15 @@ void RIT_IRQHandler(void){
 		pressed_joystick_down++;
 		if(pressed_joystick_down == 1) {
 			// MY code here :)
+			move_requested = MOVE_DOWN;
 			joystick_flag |= FLAG_JOYSTICK_DOWN;
 		}
 	}
-	else pressed_joystick_down = 0;
+	else{
+		pressed_joystick_down = 0;
+        falling_tetromino.drop_speed = NORMAL_DROP_SPEED;
+
+	}	
 	
 	// -------------------------------
 	// JOYSTICK LEFT
@@ -66,11 +71,6 @@ void RIT_IRQHandler(void){
 		if(pressed_joystick_left >= 1) {
 			// code
             move_requested = MOVE_LEFT;
-            // int next_x = falling_tetromino.pos_x - TETROMINO_UNIT_BLOCK_SIZE;
-
-            // if(!check_collision(falling_tetromino, falling_tetromino.pos_x, next_x))
-            //     falling_tetromino.pos_x = next_x;
-            
 			joystick_flag |= FLAG_JOYSTICK_LEFT;
 		}
 	}
@@ -84,10 +84,6 @@ void RIT_IRQHandler(void){
 		pressed_joystick_right++;
 		if(pressed_joystick_right >= 1) {
 			// MY code here :)
-			// int next_x = falling_tetromino.pos_x + TETROMINO_UNIT_BLOCK_SIZE;
-
-            // if(!check_collision(falling_tetromino, falling_tetromino.pos_x, next_x))
-            //     falling_tetromino.pos_x = next_x;
             move_requested = MOVE_RIGHT;
 			joystick_flag |= FLAG_JOYSTICK_RIGHT;
 		}

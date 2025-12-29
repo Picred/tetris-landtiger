@@ -669,14 +669,9 @@ void GUI_Text(uint16_t Xpos, uint16_t Ypos, uint8_t* str, uint16_t Color, uint16
 void LCD_DrawEntireSquare(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint16_t color) {
     uint32_t i, total_pixels;
     total_pixels = width * height;
-
-    // Questa parte imposta l'area di scrittura (Window)
-    // Usiamo la logica della tua LCD_Clear ma circoscritta
     for (i = 0; i < height; i++) {
         LCD_SetCursor(x, y + i);
-        LCD_WriteIndex(0x0022); // Comando per iniziare a scrivere in RAM
-        
-        // Scriviamo tutta la riga del blocco in un colpo solo
+        LCD_WriteIndex(0x0022); // area da scrivere
         uint16_t j;
 		for (j = 0; j < width; j++) {
             LCD_WriteData(color);

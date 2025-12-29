@@ -16,7 +16,8 @@ volatile char move_requested = MOVE_NONE;
 uint16_t game_grid[GRID_ROWS][GRID_COLS] = {0};
 // volatile uint8_t FALLING_SPEED = 1;
 
-const uint8_t tetrominoes[7][4][4] ={ // spec3
+
+const uint8_t tetrominoes[][4][4] ={ // spec3
     // I
 	{
 		{1,1,1,1},
@@ -116,9 +117,9 @@ void update_leaderboard(){
     int y_pos = SCORE_YPOS;
     char text[256];
     sprintf(text, "TOP:");
-    GUI_Text(SCORE_XPOS, SCORE_YPOS, (uint8_t*)text, White, Black);
+    GUI_Text(SCORE_XPOS, SCORE_YPOS, (uint8_t*)text, Blue2, Black);
 
-    sprintf(text, "%-10d", top_score);
+    sprintf(text, "%d", top_score);
 
     y_pos += TEXT_WHITE_VERTICAL_SPACE;
     GUI_Text(SCORE_XPOS, y_pos, (uint8_t*)text, White, Black);
@@ -126,18 +127,18 @@ void update_leaderboard(){
 
     sprintf(text, "SCORE:");
     y_pos += TEXT_WHITE_VERTICAL_SPACE;
-    GUI_Text(SCORE_XPOS, y_pos, (uint8_t*)text, White, Black);
+    GUI_Text(SCORE_XPOS, y_pos, (uint8_t*)text, Blue2, Black);
 
-    sprintf(text, "%-10d", actual_score);
+    sprintf(text, "%d", actual_score);
     y_pos += TEXT_WHITE_VERTICAL_SPACE;
     GUI_Text(SCORE_XPOS, y_pos, (uint8_t*)text, White, Black);
 
 
     sprintf(text, "LINES:");
     y_pos += TEXT_WHITE_VERTICAL_SPACE;
-    GUI_Text(SCORE_XPOS, y_pos, (uint8_t*)text, White, Black);
+    GUI_Text(SCORE_XPOS, y_pos, (uint8_t*)text, Blue2, Black);
 
-    sprintf(text, "%-10d", total_lines);
+    sprintf(text, "%d", total_lines);
     y_pos += TEXT_WHITE_VERTICAL_SPACE;
     GUI_Text(SCORE_XPOS, y_pos, (uint8_t*)text, White, Black);
 }
@@ -189,7 +190,7 @@ void init_game_field() {
 }
 
 void draw_block(int x, int y, short color, short border_color) {
-    int i;
+    // int i;
 
     draw_rect(x+1, y+1, TETROMINO_UNIT_BLOCK_SIZE -2, TETROMINO_UNIT_BLOCK_SIZE -2, color);
     //bordo rettangolo vuoto sopra il riempimento
@@ -236,14 +237,17 @@ Tetromino_t generate_tetromino(){
         new_tetromino.pos_x -= TETROMINO_UNIT_BLOCK_SIZE;
 
     new_tetromino.border = Black;
-    new_tetromino.is_falling = true;
+    new_tetromino.drop_speed = NORMAL_DROP_SPEED;
 
     return new_tetromino;
 }
 
-// non usat
-bool is_falling_tetromino(Tetromino_t tetromino){
-    return tetromino.is_falling;
+char get_drop_speed(Tetromino_t tetromino){
+    return tetromino.drop_speed;
+}
+
+char set_drop_speed(Tetromino_t tetromino, char new_speed){
+    return tetromino.drop_speed;
 }
 
 
@@ -293,7 +297,9 @@ void lock_tetromino(Tetromino_t tet) {
             }
         }
     }
-    // redraw_game_field();
+    set_actual_score(get_actual_score() + 10);
+    update_leaderboard();
+
 }
 
 void check_and_clear_lines() {
@@ -325,9 +331,9 @@ void redraw_partial_field(int start_row) {
         for (j = 0; j < GRID_COLS; j++) {
             int x = GAME_FIELD_LEFTX_LIMIT + (j * TETROMINO_UNIT_BLOCK_SIZE);
             int y = GAME_FIELD_UPY_LIMIT + (i * TETROMINO_UNIT_BLOCK_SIZE);
-            
+
             uint16_t color = game_grid[i][j];
-            
+
             if (color != 0) {
                 draw_block(x, y, color, Black); // Border color coerente
             } else {
@@ -371,7 +377,6 @@ void redraw_game_field() {
 
 
 void draw_rect(int x, int y, int width, int height, uint16_t color) {
-    // Se X o Y sono fuori dai limiti della libreria, evitiamo crash
     if (x >= MAX_X || y >= MAX_Y) return;
     LCD_DrawEntireSquare(x, y, width, height, color);
 }
@@ -395,11 +400,18 @@ void handle_user_input(){
 
     int next_x = falling_tetromino.pos_x;
 
-    if(move_requested == MOVE_LEFT)
-        next_x -= TETROMINO_UNIT_BLOCK_SIZE;
-    else if(move_requested == MOVE_RIGHT)
-        next_x += TETROMINO_UNIT_BLOCK_SIZE;
-
+    switch (move_requested){
+        case MOVE_LEFT:
+            next_x -= TETROMINO_UNIT_BLOCK_SIZE;
+            break;
+        case MOVE_RIGHT:
+            next_x += TETROMINO_UNIT_BLOCK_SIZE;
+            break;
+        case MOVE_DOWN:
+            falling_tetromino.drop_speed = SOFT_DROP_SPEED;
+            break;
+    }
+    
     if(!check_collision(falling_tetromino, next_x, falling_tetromino.pos_y)){
         delete_tetromino(falling_tetromino);
         falling_tetromino.pos_x = next_x;
@@ -409,18 +421,22 @@ void handle_user_input(){
 }
 
 
-
 void perform_game_tick() {
-    handle_user_input();
+    handle_user_input(); // race conditions
+    int next_y = falling_tetromino.pos_y + (falling_tetromino.drop_speed*TETROMINO_UNIT_BLOCK_SIZE); //spec5
 
-    int next_y = falling_tetromino.pos_y + TETROMINO_UNIT_BLOCK_SIZE; //spec5
-    
     if (!check_collision(falling_tetromino, falling_tetromino.pos_x, next_y)) {
         delete_tetromino(falling_tetromino);
         falling_tetromino.pos_y = next_y;
         draw_tetromino(falling_tetromino);
-        
+
     } else {
+        // di 2 non puo scendere, ma di 1?
+        int single_step_y = falling_tetromino.pos_y + TETROMINO_UNIT_BLOCK_SIZE;
+        while (!check_collision(falling_tetromino, falling_tetromino.pos_x, falling_tetromino.pos_y + TETROMINO_UNIT_BLOCK_SIZE)) {
+            delete_tetromino(falling_tetromino);
+            falling_tetromino.pos_y += TETROMINO_UNIT_BLOCK_SIZE; // incremento finchè non c'è collisione - max 2
+        }
         draw_tetromino(falling_tetromino);
         lock_tetromino(falling_tetromino);
         check_and_clear_lines();
@@ -428,6 +444,5 @@ void perform_game_tick() {
         draw_tetromino(falling_tetromino);
         // Game over con il pezzo appena creato?
     }
-    
-}
 
+}
