@@ -7,8 +7,6 @@
 #include "./tetris.h"
 
 
-
-
 volatile uint32_t pressed_button_0 = 0;
 volatile uint32_t pressed_button_1 = 0;
 volatile uint32_t pressed_button_2 = 0;

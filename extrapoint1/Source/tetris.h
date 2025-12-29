@@ -66,12 +66,20 @@ typedef struct{
 
 
 Tetromino_t generate_tetromino();
-void draw_tetromino(Tetromino_t tetromino);
 bool is_falling_tetromino(Tetromino_t tetromino);
+void handle_user_input();
+void perform_game_tick();
+void delete_tetromino(Tetromino_t tet);
+void check_and_clear_lines();
+bool check_collision(Tetromino_t tet, int new_x, int new_y);
+void lock_tetromino(Tetromino_t tet);
+
+
 
 // UTILS
 void print_screen(uint16_t Xpos, uint16_t Ypos, char* str, uint16_t Color, uint16_t bkColor);
 void print_or_delete_paused_text();
+
 
 /* LEADERBOARD*/
 void init_leaderboard();
@@ -86,11 +94,7 @@ void reset_total_lines();
 
 /* GAME FIELD */
 void init_game_field();
-bool check_collision(Tetromino_t tet, int new_x, int new_y);
-void lock_tetromino(Tetromino_t tet);
-void check_and_clear_lines();
+void draw_tetromino(Tetromino_t tetromino);
 void redraw_game_field();
 void clear_line(int row);
-void perform_game_tick();
-void delete_tetromino(Tetromino_t tet);
 void fill_rect(int x, int y, int width, int height, uint16_t color);
