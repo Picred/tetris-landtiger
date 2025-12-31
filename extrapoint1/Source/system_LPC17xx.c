@@ -403,8 +403,8 @@ uint8_t ScaleFlag = 0;
 void SystemInit (void)
 {
 #ifdef SIMULATOR
-	uint32_t i = 0;
-	uint32_t N = 100000;
+    uint32_t i = 0;
+    uint32_t N = 100000;
 #endif
 #if (CLOCK_SETUP)                       /* Clock Setup                        */
   LPC_SC->SCS       = SCS_Val;
@@ -493,14 +493,14 @@ void SystemInit (void)
 #endif
 
 #ifdef SIMULATOR
-	/* Place this after SystemInit (originally i placed it inside SystemInit function so that it was "invisible" to students) */
-	/* Calculate Scaling. NOTE: do !NOT! go step by step (breakpoint and debug) here or the measurement will be wrong */
-	
-	ScaleFlag = 1;
-	
-	for (; i < N; i++) __ASM("NOP");
-	
-	ScaleFlag = 0;
+    /* Place this after SystemInit (originally i placed it inside SystemInit function so that it was "invisible" to students) */
+    /* Calculate Scaling. NOTE: do !NOT! go step by step (breakpoint and debug) here or the measurement will be wrong */
+    
+    ScaleFlag = 1;
+    
+    for (; i < N; i++) __ASM("NOP");
+    
+    ScaleFlag = 0;
 #endif
 }
 

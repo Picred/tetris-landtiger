@@ -156,14 +156,14 @@ const uint8_t tetrominoes[19][4][4] ={ // spec3
 
 void print_or_delete_paused_text(){
     char paused_text[64];
-	sprintf(paused_text, "PAUSED");
+    sprintf(paused_text, "PAUSED");
     
     int backround_color;
-	if(game_paused)
-		backround_color = White;
-	else
-		backround_color = Black;
-	
+    if(game_paused)
+        backround_color = White;
+    else
+        backround_color = Black;
+    
     GUI_Text(PAUSED_TEXT_XPOS, PAUSED_TEXT_YPOS, (uint8_t*)paused_text, Black, backround_color);
 }
 

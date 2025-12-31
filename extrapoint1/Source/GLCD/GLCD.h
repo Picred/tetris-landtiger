@@ -7,13 +7,13 @@
 /* Private define ------------------------------------------------------------*/
 
 /* LCD Interface */
-#define PIN_EN		(1 << 19)
-#define PIN_LE		(1 << 20)
-#define PIN_DIR		(1 << 21)
+#define PIN_EN        (1 << 19)
+#define PIN_LE        (1 << 20)
+#define PIN_DIR        (1 << 21)
 #define PIN_CS      (1 << 22)
-#define PIN_RS		(1 << 23)
-#define PIN_WR		(1 << 24)
-#define PIN_RD		(1 << 25)   
+#define PIN_RS        (1 << 23)
+#define PIN_WR        (1 << 24)
+#define PIN_RD        (1 << 25)   
 
 #define LCD_EN(x)   ((x) ? (LPC_GPIO0->FIOSET = PIN_EN) : (LPC_GPIO0->FIOCLR = PIN_EN));
 #define LCD_LE(x)   ((x) ? (LPC_GPIO0->FIOSET = PIN_LE) : (LPC_GPIO0->FIOCLR = PIN_LE));

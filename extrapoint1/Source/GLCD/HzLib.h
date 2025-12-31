@@ -3,20 +3,20 @@
 **                                 http://www.powermcu.com
 **
 **--------------File Info-------------------------------------------------------------------------------
-** File name:			HzLib.h
-** Descriptions:		None
-**				
+** File name:            HzLib.h
+** Descriptions:        None
+**                
 **------------------------------------------------------------------------------------------------------
-** Created by:			AVRman
-** Created date:		2010-11-1
-** Version:				1.0
-** Descriptions:		The original version
+** Created by:            AVRman
+** Created date:        2010-11-1
+** Version:                1.0
+** Descriptions:        The original version
 **
 **------------------------------------------------------------------------------------------------------
-** Modified by:			
-** Modified date:	
+** Modified by:            
+** Modified date:    
 ** Version:
-** Descriptions:							   
+** Descriptions:                               
 ********************************************************************************************************/
 
 

@@ -3,20 +3,20 @@
 **                                 http://www.powermcu.com
 **
 **--------------File Info-------------------------------------------------------------------------------
-** File name:			AsciiLib.c
-** Descriptions:		ASCII×Ö¿â  ºáÏòÈ¡Ä£  8*16  ×¨Îª²ÊÆÁÏÔÊ¾Éè¼Æ
+** File name:            AsciiLib.c
+** Descriptions:        ASCIIï¿½Ö¿ï¿½  ï¿½ï¿½ï¿½ï¿½È¡Ä£  8*16  ×¨Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½
 **
 **------------------------------------------------------------------------------------------------------
-** Created by:			AVRman
-** Created date:		2010-11-2
-** Version:				1.0
-** Descriptions:		The original version
+** Created by:            AVRman
+** Created date:        2010-11-2
+** Version:                1.0
+** Descriptions:        The original version
 **
 **------------------------------------------------------------------------------------------------------
-** Modified by:			
-** Modified date:	
+** Modified by:            
+** Modified date:    
 ** Version:
-** Descriptions:		
+** Descriptions:        
 ********************************************************************************************************/
 
 /* Includes ------------------------------------------------------------------*/
@@ -419,11 +419,11 @@ static unsigned char const AsciiLib[95][16] = {
 
 /*******************************************************************************
 * Function Name  : GetASCIICode
-* Description    : È¡ASCIIÂë Êý¾Ý
-* Input          : - ASCII: ÊäÈëµÄASCIIÂë£¬Èç'A',BaseAddr »ùÖ· ¼´ASCIIÏÔÊ¾´úÂëÔÚFLASHÖÐµÄ´æ´¢Î»ÖÃ 
-* Output         : - *pBuffer: ´æ·ÅÊý¾ÝµÄÖ¸Õë
+* Description    : È¡ASCIIï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+* Input          : - ASCII: ï¿½ï¿½ï¿½ï¿½ï¿½ASCIIï¿½ë£¬ï¿½ï¿½'A',BaseAddr ï¿½ï¿½Ö· ï¿½ï¿½ASCIIï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½FLASHï¿½ÐµÄ´æ´¢Î»ï¿½ï¿½ 
+* Output         : - *pBuffer: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ýµï¿½Ö¸ï¿½ï¿½
 * Return         : None
-* Attention		 : None
+* Attention         : None
 *******************************************************************************/
 void GetASCIICode(unsigned char* pBuffer,unsigned char ASCII)
 {  

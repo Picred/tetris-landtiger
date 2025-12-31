@@ -103,8 +103,8 @@ __Vectors       DCD     __initial_sp              ; Top of Stack
                 DCD     MCPWM_IRQHandler          ; 46: Motor Control PWM
                 DCD     QEI_IRQHandler            ; 47: Quadrature Encoder Interface
                 DCD     PLL1_IRQHandler           ; 48: PLL1 Lock (USB PLL)
-				DCD		USBActivity_IRQHandler    ; USB Activity interrupt to wakeup
-				DCD		CANActivity_IRQHandler    ; CAN Activity interrupt to wakeup
+                DCD        USBActivity_IRQHandler    ; USB Activity interrupt to wakeup
+                DCD        CANActivity_IRQHandler    ; CAN Activity interrupt to wakeup
 
 
                 IF      :LNOT::DEF:NO_CRP
@@ -205,8 +205,8 @@ Default_Handler PROC
                 EXPORT  MCPWM_IRQHandler          [WEAK]
                 EXPORT  QEI_IRQHandler            [WEAK]
                 EXPORT  PLL1_IRQHandler           [WEAK]
-				EXPORT  USBActivity_IRQHandler    [WEAK]
-				EXPORT  CANActivity_IRQHandler    [WEAK]
+                EXPORT  USBActivity_IRQHandler    [WEAK]
+                EXPORT  CANActivity_IRQHandler    [WEAK]
 
 WDT_IRQHandler           
 TIMER0_IRQHandler         

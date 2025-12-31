@@ -24,11 +24,11 @@ extern uint8_t ScaleFlag; // <- ScaleFlag needs to visible in order for the emul
 
 
 int main(void) {
-	SystemInit(); /* System Initialization (i.e., PLL)  */
-	LCD_Initialization();
+    SystemInit(); /* System Initialization (i.e., PLL)  */
+    LCD_Initialization();
     BUTTON_init();
     joystick_init();
-	// init_RIT(5000000); // 50ms
+    // init_RIT(5000000); // 50ms
     init_RIT(250500);
     enable_RIT();
 
@@ -40,21 +40,21 @@ int main(void) {
 
     init_timer(1, 0, 0, 3, 250500);
 
-	LCD_Clear(Black);
+    LCD_Clear(Black);
 
-	update_leaderboard();
-	init_game_field();
+    update_leaderboard();
+    init_game_field();
 
-	print_or_delete_paused_text();
+    print_or_delete_paused_text();
 
     falling_tetromino = generate_tetromino();
-	enable_timer(1);
+    enable_timer(1);
 
-    LPC_SC->PCON |= 0x1; /* power-down	mode */
-	LPC_SC->PCON &= ~(0x2);
+    LPC_SC->PCON |= 0x1; /* power-down    mode */
+    LPC_SC->PCON &= ~(0x2);
 
-	while (1) {
-		__ASM("wfi");
+    while (1) {
+        __ASM("wfi");
 
-	}
+    }
 }

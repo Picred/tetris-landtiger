@@ -27,7 +27,7 @@
 #include "LPC17xx.h"
 
 /* Private typedef -----------------------------------------------------------*/
-typedef	struct POINT 
+typedef    struct POINT 
 {
    uint16_t x;
    uint16_t y;
@@ -35,7 +35,7 @@ typedef	struct POINT
 
 
 typedef struct Matrix 
-{						
+{                        
 long double An,  
             Bn,     
             Cn,   
@@ -48,32 +48,32 @@ long double An,
 /* Private variables ---------------------------------------------------------*/
 extern Coordinate ScreenSample[3];
 extern Coordinate DisplaySample[3];
-extern Matrix 		matrix ;
+extern Matrix         matrix ;
 extern Coordinate display ;
 
-#define	CHX 	        0x90 	/* Í¨µÀY+µÄÑ¡Ôñ¿ØÖÆ×Ö */	
-#define	CHY 	        0xd0	/* Í¨µÀX+µÄÑ¡Ôñ¿ØÖÆ×Ö */
+#define    CHX             0x90     /* Í¨ï¿½ï¿½Y+ï¿½ï¿½Ñ¡ï¿½    ï¿½ï¿½ï¿½ï¿½ï¿½ */	
+#define    CHY             0xd0    /* Í¨ï¿½ï¿½X+ï¿½ï¿½Ñ¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
 
 #define SSPSR_RNE       2
 #define SSPSR_BSY       4
 
 /* bit-frequency = PCLK / CPSR */
-#define SPI_SPEED_4MHz    18 	  /* 4MHz */
-#define SPI_SPEED_2MHz    36 	  /* 2MHz */
-#define	SPI_SPEED_1MHz	  72	  /* 1MHz */
-#define	SPI_SPEED_500kHz  144	  /* 500kHz */
-#define SPI_SPEED_400kHz  180	  /* 400kHz */
+#define SPI_SPEED_4MHz    18       /* 4MHz */
+#define SPI_SPEED_2MHz    36       /* 2MHz */
+#define    SPI_SPEED_1MHz      72      /* 1MHz */
+#define    SPI_SPEED_500kHz  144      /* 500kHz */
+#define SPI_SPEED_400kHz  180      /* 400kHz */
 
 
-#define TP_CS(a)	if (a)	\
-					LPC_GPIO0->FIOSET = (1<<6);\
-					else		\
-					LPC_GPIO0->FIOCLR = (1<<6)
+#define TP_CS(a)    if (a)    \
+                    LPC_GPIO0->FIOSET = (1<<6);\
+                    else        \
+                    LPC_GPIO0->FIOCLR = (1<<6)
 
 #define TP_INT_IN   ( LPC_GPIO2->FIOPIN & (1<<13) ) 
 
-/* Private function prototypes -----------------------------------------------*/				
-void TP_Init(void);	
+/* Private function prototypes -----------------------------------------------*/                
+void TP_Init(void);    
 Coordinate *Read_Ads7846(void);
 void TouchPanel_Calibrate(void);
 void DrawCross(uint16_t Xpos,uint16_t Ypos);
