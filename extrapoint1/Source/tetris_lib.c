@@ -272,9 +272,7 @@ void draw_tetromino(Tetromino_t tetromino) {
 // spec4
 Tetromino_t generate_tetromino(){
     Tetromino_t new_tetromino;
-    // new_tetromino.shape = rand() % 19;
-    new_tetromino.shape = TET_I_90;
-
+    new_tetromino.shape = rand() % 19;
 
     new_tetromino.color = colors[new_tetromino.shape];
     new_tetromino.pos_x = SPAWN_POINTX;
@@ -284,7 +282,6 @@ Tetromino_t generate_tetromino(){
         disable_timer(1);
         print_screen(PAUSED_TEXT_XPOS, PAUSED_TEXT_YPOS, "GAME OVER", Red, Black);
     }
-
 
     if (new_tetromino.shape == TET_I) // align
         new_tetromino.pos_x -= TETROMINO_UNIT_BLOCK_SIZE;
@@ -303,22 +300,23 @@ void print_screen(uint16_t Xpos, uint16_t Ypos, char* str, uint16_t color, uint1
     GUI_Text(Xpos, Ypos, (uint8_t *)text, color, bkColor);
 }
 
+
 //logic
 bool check_collision(Tetromino_t tet, int new_x, int new_y) {
     int i, j;
     for (j = 0; j < 4; j++) {
         for (i = 0; i < 4; i++) {
             if (tetrominoes[tet.shape][j][i]) {
-                // Trasforma coordinate pixel in indici matrice
+                // coordinate pixel -> indici matrice
                 int grid_x = (new_x - GAME_FIELD_LEFTX_LIMIT) / TETROMINO_UNIT_BLOCK_SIZE + i;
                 int grid_y = (new_y - GAME_FIELD_UPY_LIMIT) / TETROMINO_UNIT_BLOCK_SIZE + j;
 
-                // 1. Controlla i bordi del campo (X e Y)
+                // check bordi del GAME_FIELD (X e Y)
                 if (grid_x < 0 || grid_x >= GRID_COLS || grid_y >= GRID_ROWS) {
                     return true;
                 }
 
-                // 2. Controlla collisione con blocchi esistenti
+                // check collisione con altri blocchi (game_grid [i][j] != 0)
                 if (game_grid[grid_y][grid_x] != 0) {
                     return true;
                 }
@@ -438,7 +436,6 @@ void rotate_falling_tetromino(){
     int next_shape = original_shape;
 
     switch (original_shape){
-        // TET_I
         case TET_I: next_shape = TET_I_90; 
             break;
         case TET_I_90: next_shape = TET_I;
@@ -457,6 +454,7 @@ void rotate_falling_tetromino(){
             break;
         case TET_S_90: next_shape = TET_S;
             break;
+
         case TET_Z: next_shape = TET_Z_90;
             break;
         case TET_Z_90: next_shape = TET_Z;
@@ -479,13 +477,10 @@ void rotate_falling_tetromino(){
             break;
         case TET_J_270: next_shape = TET_J;
             break;
-        
     }
-
     falling_tetromino.shape = next_shape;
     if(check_collision(falling_tetromino, falling_tetromino.pos_x, falling_tetromino.pos_y))
         falling_tetromino.shape = original_shape; // se collide la nuova forma, ritorna quella prima
-
 }
 
 void handle_user_input(){
@@ -508,7 +503,6 @@ void handle_user_input(){
             rotate_falling_tetromino();
             break;
     }
-    
     if(!check_collision(falling_tetromino, next_x, falling_tetromino.pos_y)){
         delete_tetromino(falling_tetromino);
         falling_tetromino.pos_x = next_x;
@@ -540,5 +534,4 @@ void perform_game_tick() {
         falling_tetromino = generate_tetromino();
         draw_tetromino(falling_tetromino);
     }
-
 }
