@@ -71,9 +71,8 @@
 #define MOVE_NONE 12
 #define MOVE_DOWN 13
 #define MOVE_UP 14
-#define KEY_RESET_GAME 15
-#define KEY_PAUSE_GAME 16
-#define KEY_NONE 17
+#define MOVE_HARD_DROP 15
+
 
 #define NORMAL_DROP_SPEED 1 // 1 block per second
 #define SOFT_DROP_SPEED 2 // 2 blocks per second

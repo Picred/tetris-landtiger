@@ -509,6 +509,13 @@ void rotate_falling_tetromino(){
         falling_tetromino.shape = original_shape; // se collide la nuova forma, ritorna quella prima
 }
 
+void hard_drop_falling_tetromino(){
+    delete_tetromino(falling_tetromino);
+    while (!check_collision(falling_tetromino, falling_tetromino.pos_x, falling_tetromino.pos_y + TETROMINO_UNIT_BLOCK_SIZE)) {
+        falling_tetromino.pos_y += TETROMINO_UNIT_BLOCK_SIZE;
+    }
+}
+
 void handle_user_input(){
     if (move_requested == MOVE_NONE || game_paused || game_over) return;
 
@@ -527,6 +534,9 @@ void handle_user_input(){
         case MOVE_UP: //rotate
             delete_tetromino(falling_tetromino);
             rotate_falling_tetromino();
+            break;
+        case MOVE_HARD_DROP:
+            hard_drop_falling_tetromino();
             break;
     }
     if(!check_collision(falling_tetromino, next_x, falling_tetromino.pos_y)){

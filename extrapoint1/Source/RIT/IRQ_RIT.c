@@ -26,7 +26,7 @@ volatile uint8_t btn_flag = 0;
 
 extern volatile bool game_paused;
 extern volatile bool game_over;
-extern bool game_reset_requested;
+extern volatile bool game_reset_requested;
 
 extern volatile Tetromino_t falling_tetromino;
 extern volatile char move_requested;
@@ -226,6 +226,7 @@ void RIT_IRQHandler(void){
                 // short press
                 btn_flag |= FLAG_BUTTON_2_SHORT;
             }
+            move_requested = MOVE_HARD_DROP;
             pressed_button_2 = 0;
             NVIC_EnableIRQ(EINT2_IRQn);
             LPC_PINCON->PINSEL4 |= (1 << 24);
