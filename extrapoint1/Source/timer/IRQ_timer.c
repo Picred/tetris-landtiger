@@ -3,11 +3,7 @@
 #include "./tetris.h"
 #include "GLCD/GLCD.h"
 
-volatile int y_axis = 0;
-extern volatile int colors[];
-extern volatile Tetromino_t falling_tetromino;
 extern volatile bool game_paused;
-
 
 void TIMER0_IRQHandler(void) { // used for srand on main
     if (LPC_TIM0->IR & 01) {
@@ -25,7 +21,6 @@ void TIMER1_IRQHandler(void) { // time game
     LPC_TIM1->IR = 1;   /* clear interrupt flag */
     return;
 }
-
 
 
 void TIMER2_IRQHandler(void) {

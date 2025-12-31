@@ -27,44 +27,18 @@ extern volatile uint32_t pressed_joystick_down_right;
 extern volatile uint8_t joystick_flag;
 extern volatile uint8_t btn_flag;
 
-
-/******************************************************************************
-** Function name:        enable_RIT
-**
-** Descriptions:        Enable RIT
-**
-** parameters:            None
-** Returned value:        None
-**
-******************************************************************************/
 void enable_RIT( void ){
   LPC_RIT->RICTRL |= (1<<3);    
   return;
 }
 
-/******************************************************************************
-** Function name:        disable_RIT
-**
-** Descriptions:        Disable RIT
-**
-** parameters:            None
-** Returned value:        None
-**
-******************************************************************************/
+
 void disable_RIT( void ){
     LPC_RIT->RICTRL &= ~(1<<3);    
   return;
 }
 
-/******************************************************************************
-** Function name:        reset_RIT
-**
-** Descriptions:        Reset RIT
-**
-** parameters:            RIT number: 0 or 1
-** Returned value:        None
-**
-******************************************************************************/
+
 void reset_RIT( void ){
   LPC_RIT->RICOUNTER = 0;          // Set count value to 0
   return;
@@ -99,7 +73,3 @@ uint32_t init_RIT ( uint32_t RITInterval ){
 
     return (0);
 }
-
-/******************************************************************************
-**                            End Of File
-******************************************************************************/

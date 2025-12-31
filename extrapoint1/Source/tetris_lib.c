@@ -157,13 +157,13 @@ const uint8_t tetrominoes[19][4][4] ={ // spec3
 void print_or_delete_paused_text(){
     char paused_text[64];
     sprintf(paused_text, "PAUSED");
-    
+
     int backround_color;
     if(game_paused)
         backround_color = White;
     else
         backround_color = Black;
-    
+
     GUI_Text(PAUSED_TEXT_XPOS, PAUSED_TEXT_YPOS, (uint8_t*)paused_text, Black, backround_color);
 }
 
@@ -175,7 +175,6 @@ void update_leaderboard(){
     GUI_Text(SCORE_XPOS, SCORE_YPOS, (uint8_t*)text, Blue2, Black);
 
     sprintf(text, "%d", top_score);
-
     y_pos += TEXT_WHITE_VERTICAL_SPACE;
     GUI_Text(SCORE_XPOS, y_pos, (uint8_t*)text, White, Black);
 
@@ -232,7 +231,7 @@ void init_game_field() {
     for(i = 0; i < GAME_FIELD_EDGE_SIZE; i++) {
         // up
         LCD_DrawLine(GAME_FIELD_LEFTX_LIMIT - GAME_FIELD_EDGE_SIZE, i, GAME_FIELD_RIGHTX_LIMIT + GAME_FIELD_EDGE_SIZE - 1, i, White);
-        
+
         // down
         LCD_DrawLine(GAME_FIELD_LEFTX_LIMIT - GAME_FIELD_EDGE_SIZE, GAME_FIELD_DOWNY_LIMIT + i, GAME_FIELD_RIGHTX_LIMIT + GAME_FIELD_EDGE_SIZE - 1, GAME_FIELD_DOWNY_LIMIT + i, White);
 
@@ -260,7 +259,6 @@ void draw_tetromino(Tetromino_t tetromino) {
     int i, j;
     for (j = 0; j < 4; j++) {
         for (i = 0; i < 4; i++) {
-            
             if (tetrominoes[tetromino.shape][j][i]) { // Se nella matrice 4x4 c'è un pezzo (1), lo disegno
                 int draw_x = tetromino.pos_x + (i * TETROMINO_UNIT_BLOCK_SIZE);
                 int draw_y = tetromino.pos_y + (j * TETROMINO_UNIT_BLOCK_SIZE);
@@ -276,7 +274,7 @@ Tetromino_t generate_tetromino(){
     Tetromino_t new_tetromino;
     // new_tetromino.shape = rand() % 19;
     new_tetromino.shape = TET_I_90;
-    
+
 
     new_tetromino.color = colors[new_tetromino.shape];
     new_tetromino.pos_x = SPAWN_POINTX;
@@ -286,8 +284,8 @@ Tetromino_t generate_tetromino(){
         disable_timer(1);
         print_screen(PAUSED_TEXT_XPOS, PAUSED_TEXT_YPOS, "GAME OVER", Red, Black);
     }
-    
-    
+
+
     if (new_tetromino.shape == TET_I) // align
         new_tetromino.pos_x -= TETROMINO_UNIT_BLOCK_SIZE;
 
@@ -361,11 +359,7 @@ void check_and_clear_lines() {
 
         if (num_blocks == GRID_COLS) { // riga completa, tutte le colonne "contate"
             clear_line(i);
-            i++; // Ricontrolla la stessa riga (perché quella sopra è scesa)
-
-            // Aggiorna punteggio
-            // set_actual_score(get_actual_score() + 100);
-            // update_leaderboard();
+            i++; // re-check stessa riga
             total_cleared_lines++;
         }
     }
@@ -390,7 +384,6 @@ void check_and_clear_lines() {
 
 void redraw_partial_field(int start_row) {
     int i, j;
-    // Partiamo dalla riga eliminata e risaliamo fino alla cima (riga 0)
     for (i = start_row; i >= 0; i--) {
         for (j = 0; j < GRID_COLS; j++) {
             int x = GAME_FIELD_LEFTX_LIMIT + (j * TETROMINO_UNIT_BLOCK_SIZE);
@@ -401,7 +394,6 @@ void redraw_partial_field(int start_row) {
             if (color != 0) {
                 draw_block(x, y, color, Black); // Border color coerente
             } else {
-                // Riempi di nero (o il colore di sfondo del campo) le celle vuote
                 draw_rect(x, y, TETROMINO_UNIT_BLOCK_SIZE, TETROMINO_UNIT_BLOCK_SIZE, Black);
             }
         }
@@ -420,24 +412,6 @@ void clear_line(int row) {
     }
     redraw_partial_field(row); 
 }
-
-// void redraw_game_field() {
-//     int i, j;
-//     for (i = 0; i < GRID_ROWS; i++) {
-//         for (j = 0; j < GRID_COLS; j++) {
-//             int x = GAME_FIELD_LEFTX_LIMIT + (j * TETROMINO_UNIT_BLOCK_SIZE);
-//             int y = GAME_FIELD_UPY_LIMIT + (i * TETROMINO_UNIT_BLOCK_SIZE);
-
-//             uint16_t color = game_grid[i][j];
-
-//             if (color != 0)
-//                 draw_block(x, y, color, Black); // HERE
-//             else 
-//                 draw_rect(x, y, TETROMINO_UNIT_BLOCK_SIZE, TETROMINO_UNIT_BLOCK_SIZE, Black);
-            
-//         }
-//     }
-// }
 
 
 void draw_rect(int x, int y, int width, int height, uint16_t color) {
@@ -532,7 +506,6 @@ void handle_user_input(){
         case MOVE_UP: //rotate
             delete_tetromino(falling_tetromino);
             rotate_falling_tetromino();
-            // draw_tetromino(falling_tetromino);
             break;
     }
     
@@ -566,7 +539,6 @@ void perform_game_tick() {
         check_and_clear_lines();
         falling_tetromino = generate_tetromino();
         draw_tetromino(falling_tetromino);
-        // Game over con il pezzo appena creato?
     }
 
 }

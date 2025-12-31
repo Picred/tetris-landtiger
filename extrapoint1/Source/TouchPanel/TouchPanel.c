@@ -32,9 +32,7 @@ Coordinate  display ;
 /* Display Sample */    
 Coordinate ScreenSample[3];
 /* LCD Sample */
-Coordinate DisplaySample[3] = {{ 45,  45},
-                                                             { 45, 270},
-                               {190, 190}} ;
+Coordinate DisplaySample[3] = {{ 45,  45}, { 45, 270},{190, 190}} ;
 
 /* Private define ------------------------------------------------------------*/
 #define THRESHOLD 2  
