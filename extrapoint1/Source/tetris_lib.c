@@ -10,6 +10,8 @@ volatile int actual_score = 0;
 volatile int total_lines = 0;
 volatile Tetromino_t falling_tetromino;
 volatile bool game_paused = true;
+volatile bool game_over = false;
+volatile bool game_reset_requested = false;
 volatile int colors[19] = {Cyan, Yellow, Magenta, Green, Red, Orange, Blue2, Cyan, Magenta, Magenta, Magenta, Green, Red, Orange, Orange, Orange, Blue2, Blue2, Blue2 };
 
 volatile char move_requested = MOVE_NONE;
@@ -167,6 +169,19 @@ void print_or_delete_paused_text(){
     GUI_Text(PAUSED_TEXT_XPOS, PAUSED_TEXT_YPOS, (uint8_t*)paused_text, Black, backround_color);
 }
 
+void print_or_delete_game_over_text(){
+    char game_over_text[64];
+    sprintf(game_over_text, "GAME OVER");
+
+    int text_color;
+    if(game_over)
+        text_color = Red;
+    else
+        text_color = Black;
+
+    GUI_Text(GAME_OVER_TEXT_XPOS, GAME_OVER_TEXT_YPOS, (uint8_t*)game_over_text, text_color, Black);
+}
+
 
 void update_leaderboard(){
     int y_pos = SCORE_YPOS;
@@ -174,7 +189,7 @@ void update_leaderboard(){
     sprintf(text, "TOP:");
     GUI_Text(SCORE_XPOS, SCORE_YPOS, (uint8_t*)text, Blue2, Black);
 
-    sprintf(text, "%d", top_score);
+    sprintf(text, "%5d", top_score);
     y_pos += TEXT_WHITE_VERTICAL_SPACE;
     GUI_Text(SCORE_XPOS, y_pos, (uint8_t*)text, White, Black);
 
@@ -183,7 +198,7 @@ void update_leaderboard(){
     y_pos += TEXT_WHITE_VERTICAL_SPACE;
     GUI_Text(SCORE_XPOS, y_pos, (uint8_t*)text, Blue2, Black);
 
-    sprintf(text, "%d", actual_score);
+    sprintf(text, "%5d", actual_score);
     y_pos += TEXT_WHITE_VERTICAL_SPACE;
     GUI_Text(SCORE_XPOS, y_pos, (uint8_t*)text, White, Black);
 
@@ -192,7 +207,7 @@ void update_leaderboard(){
     y_pos += TEXT_WHITE_VERTICAL_SPACE;
     GUI_Text(SCORE_XPOS, y_pos, (uint8_t*)text, Blue2, Black);
 
-    sprintf(text, "%d", total_lines);
+    sprintf(text, "%5d", total_lines);
     y_pos += TEXT_WHITE_VERTICAL_SPACE;
     GUI_Text(SCORE_XPOS, y_pos, (uint8_t*)text, White, Black);
 }
@@ -203,6 +218,10 @@ int get_actual_score(){
 
 void set_actual_score(int new_actual_score){
     actual_score = new_actual_score;
+}
+
+void reset_actual_score(){
+    actual_score = 0;
 }
 
 int get_total_lines(){
@@ -223,6 +242,10 @@ int get_top_score(){
 
 void set_top_score(int new_top_score){
     top_score = new_top_score;
+}
+
+void calculate_new_top_score(){
+    top_score = (actual_score > top_score ? actual_score : top_score);
 }
 
 
@@ -279,8 +302,11 @@ Tetromino_t generate_tetromino(){
     new_tetromino.pos_y = SPAWN_POINTY;
 
     if(check_collision(new_tetromino, new_tetromino.pos_x, new_tetromino.pos_y)){
-        disable_timer(1);
-        print_screen(PAUSED_TEXT_XPOS, PAUSED_TEXT_YPOS, "GAME OVER", Red, Black);
+        game_over = true;
+        print_or_delete_game_over_text();
+        calculate_new_top_score();
+        update_leaderboard();
+        // print_screen(PAUSED_TEXT_XPOS, PAUSED_TEXT_YPOS, "GAME OVER", Red, Black);
     }
 
     if (new_tetromino.shape == TET_I) // align
@@ -484,7 +510,7 @@ void rotate_falling_tetromino(){
 }
 
 void handle_user_input(){
-    if (move_requested == MOVE_NONE || game_paused) return;
+    if (move_requested == MOVE_NONE || game_paused || game_over) return;
 
     int next_x = falling_tetromino.pos_x;
 
@@ -535,3 +561,15 @@ void perform_game_tick() {
         draw_tetromino(falling_tetromino);
     }
 }
+
+void reset_game(){
+    LCD_DrawEntireSquare(GAME_FIELD_LEFTX_LIMIT, GAME_FIELD_UPY_LIMIT, GAME_FIELD_WIDTH, GAME_FIELD_HEIGTH, Black);
+    print_or_delete_paused_text();
+    game_over = false;
+    print_or_delete_game_over_text();
+    memset((void*)game_grid, 0, sizeof(game_grid));
+    reset_total_lines();
+    reset_actual_score();
+    update_leaderboard();
+}
+

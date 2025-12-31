@@ -25,6 +25,9 @@ volatile uint8_t joystick_flag = 0;
 volatile uint8_t btn_flag = 0;
 
 extern volatile bool game_paused;
+extern volatile bool game_over;
+extern bool game_reset_requested;
+
 extern volatile Tetromino_t falling_tetromino;
 extern volatile char move_requested;
 
@@ -189,21 +192,28 @@ void RIT_IRQHandler(void){
                 // short press 
                 btn_flag |= FLAG_BUTTON_1_SHORT;
             }
-            game_paused = !game_paused;
-            print_or_delete_paused_text();
-
+            if(!game_over){
+                game_paused = !game_paused;
+                print_or_delete_paused_text();
+            }else{
+                game_over = false;
+                game_paused = true;
+                game_reset_requested = true;
+            }
+            
+            
             pressed_button_1 = 0;
             NVIC_EnableIRQ(EINT1_IRQn);
             LPC_PINCON->PINSEL4 |= (1 << 22);
         } 
-        // else {
-        //     if(pressed_button_1 >= LONG_PRESS_COUNT){
-        //         // long press
-        //         btn_flag |= FLAG_BUTTON_1_LONG;
-        //         pressed_button_1 = 0;
-        //     }
-        //     pressed_button_1++;
-        // }
+        else {
+            if(pressed_button_1 >= LONG_PRESS_COUNT){
+                // long press
+                btn_flag |= FLAG_BUTTON_1_LONG;
+                pressed_button_1 = 0;
+            }
+            pressed_button_1++;
+        }
     }
 
     // -------------------------------
