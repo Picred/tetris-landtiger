@@ -361,7 +361,7 @@ void lock_tetromino(Tetromino_t tet) {
                 int grid_x = (tet.pos_x - GAME_FIELD_LEFTX_LIMIT) / TETROMINO_UNIT_BLOCK_SIZE + i;
                 int grid_y = (tet.pos_y - GAME_FIELD_UPY_LIMIT) / TETROMINO_UNIT_BLOCK_SIZE + j;
 
-                if (grid_y >= 0 && grid_y < GRID_ROWS) {
+                if (grid_y >= 0 && grid_y < GRID_ROWS && grid_x >= 0 && grid_x < GRID_COLS) {
                     game_grid[grid_y][grid_x] = tet.color;
                 }
             }
