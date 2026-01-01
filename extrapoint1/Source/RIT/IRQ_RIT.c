@@ -228,8 +228,9 @@ void RIT_IRQHandler(void){
             }
             move_requested = MOVE_HARD_DROP;
             pressed_button_2 = 0;
-            NVIC_EnableIRQ(EINT2_IRQn);
+            LPC_PINCON->PINSEL4 &= ~(3 << 24);
             LPC_PINCON->PINSEL4 |= (1 << 24);
+            NVIC_EnableIRQ(EINT2_IRQn);
         } else {
             if(pressed_button_2 >= LONG_PRESS_COUNT){
                 // long press

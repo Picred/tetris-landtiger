@@ -26,8 +26,10 @@ void EINT1_IRQHandler (void){
 // KEY2
 void EINT2_IRQHandler (void){
     pressed_button_2 = 1;
+    LPC_PINCON->PINSEL4 &= ~(3 << 24); 
     NVIC_DisableIRQ(EINT2_IRQn); /* disable Button interrupts */
-    LPC_PINCON->PINSEL4 &= ~(1 << 24); 
-    LPC_PINCON->PINSEL4 &= ~(1 << 25);
+    // LPC_PINCON->PINSEL4 &= ~(1 << 24); 
+    
+    // LPC_PINCON->PINSEL4 &= ~(1 << 25);
     LPC_SC->EXTINT &= (1 << 2);     /* clear pending interrupt */
 }

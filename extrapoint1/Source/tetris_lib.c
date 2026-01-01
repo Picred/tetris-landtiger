@@ -577,7 +577,7 @@ void reset_game(){
     print_or_delete_paused_text();
     game_over = false;
     print_or_delete_game_over_text();
-    memset((void*)game_grid, 0, sizeof(game_grid));
+    memset(game_grid, 0, sizeof(game_grid));
     reset_total_lines();
     reset_actual_score();
     update_leaderboard();
