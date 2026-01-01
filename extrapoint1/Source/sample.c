@@ -20,12 +20,12 @@ int main(void) {
     LCD_Initialization();
     BUTTON_init();
     joystick_init();
-    init_RIT(250500);
+    init_RIT(250500); // 2.5 ms
     enable_RIT();
 
     init_timer(0, 0, 0, 3, 2500000);
     enable_timer(0);
-    init_timer(1, 0, 0, 3, 250500);
+    init_timer(1, 0, 0, 3, 250500); // 2.5 ms
     
     LCD_Clear(Black);
     update_leaderboard();
