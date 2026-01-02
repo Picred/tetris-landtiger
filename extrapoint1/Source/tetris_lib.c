@@ -155,7 +155,13 @@ const uint8_t tetrominoes[19][4][4] ={ // spec3
 
 };
 
-
+/**
+ * @brief 
+ * @param Xpos X coordinate
+ * @warning str must be less than 64 chars
+ * @note see <GLCD.h> for colors
+ * @return void
+*/
 void print_or_delete_paused_text(){
     char paused_text[64];
     sprintf(paused_text, "PAUSED");
@@ -169,6 +175,13 @@ void print_or_delete_paused_text(){
     GUI_Text(PAUSED_TEXT_XPOS, PAUSED_TEXT_YPOS, (uint8_t*)paused_text, Black, backround_color);
 }
 
+/**
+ * @brief 
+ * @param Xpos X coordinate
+ * @warning str must be less than 64 chars
+ * @note see <GLCD.h> for colors
+ * @return void
+*/
 void print_or_delete_game_over_text(){
     char game_over_text[64];
     sprintf(game_over_text, "GAME OVER");
@@ -182,7 +195,11 @@ void print_or_delete_game_over_text(){
     GUI_Text(GAME_OVER_TEXT_XPOS, GAME_OVER_TEXT_YPOS, (uint8_t*)game_over_text, text_color, Black);
 }
 
-
+/**
+ * @brief Draws on screen the leaderboard.
+ * @note At least one partial score should be updated before using it
+ * @return void
+*/
 void update_leaderboard(){
     int y_pos = SCORE_YPOS;
     char text[256];
@@ -211,6 +228,7 @@ void update_leaderboard(){
     y_pos += TEXT_WHITE_VERTICAL_SPACE;
     GUI_Text(SCORE_XPOS, y_pos, (uint8_t*)text, White, Black);
 }
+
 
 int get_actual_score(){
     return actual_score;
@@ -244,11 +262,18 @@ void set_top_score(int new_top_score){
     top_score = new_top_score;
 }
 
+/**
+ * @brief Calculates the new top score (globally defined) by comparing the actual score.
+ * @return void
+*/
 void calculate_new_top_score(){
     top_score = (actual_score > top_score ? actual_score : top_score);
 }
 
-
+/**
+ * @brief Draws on screen the edges of the game field.
+ * @return void
+*/
 void init_game_field() {
     int i;
     for(i = 0; i < GAME_FIELD_EDGE_SIZE; i++) {
@@ -266,18 +291,29 @@ void init_game_field() {
     }
 }
 
+/**
+ * @brief Draws on screen a block of a tetromino.
+ * @param x coordinate
+ * @param y coordinate
+ * @param color of the filling
+ * @param border_color 
+ * @return void
+*/
 void draw_block(int x, int y, short color, short border_color) {
-    // int i;
 
     draw_rect(x+1, y+1, TETROMINO_UNIT_BLOCK_SIZE -2, TETROMINO_UNIT_BLOCK_SIZE -2, color);
-    //bordo rettangolo vuoto sopra il riempimento
+    //empty edge rect above the filling
     LCD_DrawLine(x, y, x + TETROMINO_UNIT_BLOCK_SIZE - 1, y, border_color); // up
     LCD_DrawLine(x, y + TETROMINO_UNIT_BLOCK_SIZE - 1, x + TETROMINO_UNIT_BLOCK_SIZE - 1, y + TETROMINO_UNIT_BLOCK_SIZE - 1, border_color); // down
     LCD_DrawLine(x, y, x, y + TETROMINO_UNIT_BLOCK_SIZE - 1, border_color); // sx
     LCD_DrawLine(x + TETROMINO_UNIT_BLOCK_SIZE - 1, y, x + TETROMINO_UNIT_BLOCK_SIZE - 1, y + TETROMINO_UNIT_BLOCK_SIZE - 1, border_color); // dx
 }
 
-
+/**
+ * @brief Draws an entire tetromino
+ * @param tetromino to draw
+ * @return void
+*/
 void draw_tetromino(Tetromino_t tetromino) {
     int i, j;
     for (j = 0; j < 4; j++) {
@@ -292,7 +328,12 @@ void draw_tetromino(Tetromino_t tetromino) {
     }
 }
 
-// spec4
+/**
+ * @brief Generates a tetromino with random shape on spawn point position with NORMAL_DROP_SPEED (1 block / game tick)
+ * @note The check for collisions for game over is provided here
+ * @warning If TET_I is generated (it's horizontal by default), the position is auto-aligned
+ * @return The generated tetromino as Tetromino_t
+*/
 Tetromino_t generate_tetromino(){
     Tetromino_t new_tetromino;
     new_tetromino.shape = rand() % 19;
@@ -306,7 +347,6 @@ Tetromino_t generate_tetromino(){
         print_or_delete_game_over_text();
         calculate_new_top_score();
         update_leaderboard();
-        // print_screen(PAUSED_TEXT_XPOS, PAUSED_TEXT_YPOS, "GAME OVER", Red, Black);
     }
 
     if (new_tetromino.shape == TET_I) // align
@@ -319,7 +359,17 @@ Tetromino_t generate_tetromino(){
 }
 
 
-
+/**
+ * @brief Prints on screen the given string.
+ * @param Xpos X coordinate
+ * @param Ypos Y coordinate
+ * @param str text to print
+ * @param color
+ * @param bkColor background color
+ * @warning str must be less than 64 chars
+ * @note see <GLCD.h> for colors
+ * @return void
+*/
 void print_screen(uint16_t Xpos, uint16_t Ypos, char* str, uint16_t color, uint16_t bkColor){
     char text[64];
     sprintf(text, "%s", str);
@@ -327,22 +377,28 @@ void print_screen(uint16_t Xpos, uint16_t Ypos, char* str, uint16_t color, uint1
 }
 
 
-//logic
+/**
+ * @brief Checks the collisions with other tetrominoes or with the edge of the corrisponding matrix
+ * @param tet is the tetromino to check
+ * @param new_x position to check
+ * @param new_y position to check
+ * @return bool true if collision occurs, false otherwise
+*/
 bool check_collision(Tetromino_t tet, int new_x, int new_y) {
     int i, j;
     for (j = 0; j < 4; j++) {
         for (i = 0; i < 4; i++) {
             if (tetrominoes[tet.shape][j][i]) {
-                // coordinate pixel -> indici matrice
+                // pixel coordinates -> matrix index mapping
                 int grid_x = (new_x - GAME_FIELD_LEFTX_LIMIT) / TETROMINO_UNIT_BLOCK_SIZE + i;
                 int grid_y = (new_y - GAME_FIELD_UPY_LIMIT) / TETROMINO_UNIT_BLOCK_SIZE + j;
 
-                // check bordi del GAME_FIELD (X e Y)
+                // check GAME_FIELD edges (X e Y)
                 if (grid_x < 0 || grid_x >= GRID_COLS || grid_y >= GRID_ROWS) {
                     return true;
                 }
 
-                // check collisione con altri blocchi (game_grid [i][j] != 0)
+                // check collisions with other blocks (game_grid [i][j] != 0)
                 if (game_grid[grid_y][grid_x] != 0) {
                     return true;
                 }
@@ -352,7 +408,11 @@ bool check_collision(Tetromino_t tet, int new_x, int new_y) {
     return false;
 }
 
-
+/**
+ * @brief Logically set the tetromino as locked on the game field, updating the corrisponding matrix. Also Updates the leaderboard.
+ * @param tet is the tetromino to lock on the game field
+ * @return void
+*/
 void lock_tetromino(Tetromino_t tet) {
     int i, j;
     for (j = 0; j < 4; j++) {
@@ -371,6 +431,10 @@ void lock_tetromino(Tetromino_t tet) {
     update_leaderboard();
 }
 
+/**
+ * @brief Checks and removes lines if they are completed. Also updates the leaderboard
+ * @return void
+*/
 void check_and_clear_lines() {
     int i, j, num_blocks;
     int total_cleared_lines = 0;
@@ -405,7 +469,11 @@ void check_and_clear_lines() {
 }
 
 
-
+/**
+ * @brief Redraws a portion of the game field after some lines were deleted (performs the sliding of tetrominoes towards the bottom)
+ * @param start_row from where to start redrawing
+ * @return void
+*/
 void redraw_partial_field(int start_row) {
     int i, j;
     for (i = start_row; i >= 0; i--) {
@@ -424,6 +492,11 @@ void redraw_partial_field(int start_row) {
     }
 }
 
+/**
+ * @brief Clears an entire line. Also redraws partial game field after clearing
+ * @param row to clear
+ * @return void
+*/
 void clear_line(int row) {
     int i, j;
     for (i = row; i > 0; i--) {
@@ -437,12 +510,25 @@ void clear_line(int row) {
     redraw_partial_field(row); 
 }
 
-
+/**
+ * @brief Draws a rectangle on screen. Checks the limits of the screen
+ * @param x coordinate
+ * @param y coordinate
+ * @param width to draw
+ * @param height to draw
+ * @param color of filling
+ * @return void
+*/
 void draw_rect(int x, int y, int width, int height, uint16_t color) {
     if (x >= MAX_X || y >= MAX_Y) return;
     LCD_DrawEntireSquare(x, y, width, height, color);
 }
 
+/**
+ * @brief Delete an existing tetromino by drawing on its position with the same color of the background of the game field.
+ * @param tet is the tetromino to delete
+ * @return void
+*/
 void delete_tetromino(Tetromino_t tet) {
     int i, j;
     for (j = 0; j < 4; j++) {
@@ -457,6 +543,10 @@ void delete_tetromino(Tetromino_t tet) {
     }
 }
 
+/**
+ * @brief Performs the rotation of the tetromino which is falling. Logically changes the tetromino.shape. Collision checking is done between tetromino and game field edges
+ * @return void
+*/
 void rotate_falling_tetromino(){
     int original_shape = falling_tetromino.shape;
     int next_shape = original_shape;
@@ -509,6 +599,10 @@ void rotate_falling_tetromino(){
         falling_tetromino.shape = original_shape; // se collide la nuova forma, ritorna quella prima
 }
 
+/**
+ * @brief Calculates the new y coordinate position by adding TETROMINO_UNIT_BLOC_SIZE each time until it reaches a new tetromino or the bottom.
+ * @return void
+*/
 void hard_drop_falling_tetromino(){
     delete_tetromino(falling_tetromino);
     while (!check_collision(falling_tetromino, falling_tetromino.pos_x, falling_tetromino.pos_y + TETROMINO_UNIT_BLOCK_SIZE)) {
@@ -516,6 +610,11 @@ void hard_drop_falling_tetromino(){
     }
 }
 
+/**
+ * @brief Handles the user input (joystick or buttons) in order to avoid race conditions.
+ * @note move_requested should be set by RIT
+ * @return void
+*/
 void handle_user_input(){
     if (move_requested == MOVE_NONE || game_paused || game_over) return;
 
@@ -547,7 +646,10 @@ void handle_user_input(){
     move_requested = MOVE_NONE;
 }
 
-
+/**
+ * @brief Main game logic. It handles the time of the game and the next step (such as next y coordinate, user input, tetromino drawing, deleting and drawing).
+ * @return void
+*/
 void perform_game_tick() {
     handle_user_input(); // race conditions
     int next_y = falling_tetromino.pos_y + (falling_tetromino.drop_speed*TETROMINO_UNIT_BLOCK_SIZE); //spec5
@@ -572,6 +674,10 @@ void perform_game_tick() {
     }
 }
 
+/**
+ * @brief Resets the game status. Updates the leaderboard and restarts the game.
+ * @return void
+*/
 void reset_game(){
     LCD_DrawEntireSquare(GAME_FIELD_LEFTX_LIMIT, GAME_FIELD_UPY_LIMIT, GAME_FIELD_WIDTH, GAME_FIELD_HEIGTH, Black);
     print_or_delete_paused_text();
@@ -582,4 +688,3 @@ void reset_game(){
     reset_actual_score();
     update_leaderboard();
 }
-
