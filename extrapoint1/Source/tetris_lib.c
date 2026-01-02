@@ -413,15 +413,15 @@ bool check_collision(Tetromino_t tet, int new_x, int new_y) {
  * @param tet is the tetromino to lock on the game field
  * @return void
 */
-void lock_tetromino(Tetromino_t tet) {
+void lock_tetromino(Tetromino_t tet){
     int i, j;
-    for (j = 0; j < 4; j++) {
-        for (i = 0; i < 4; i++) {
-            if (tetrominoes[tet.shape][j][i]) {
+    for (j = 0; j < 4; j++){
+        for (i = 0; i < 4; i++){
+            if (tetrominoes[tet.shape][j][i]){
                 int grid_x = (tet.pos_x - GAME_FIELD_LEFTX_LIMIT) / TETROMINO_UNIT_BLOCK_SIZE + i;
                 int grid_y = (tet.pos_y - GAME_FIELD_UPY_LIMIT) / TETROMINO_UNIT_BLOCK_SIZE + j;
 
-                if (grid_y >= 0 && grid_y < GRID_ROWS && grid_x >= 0 && grid_x < GRID_COLS) {
+                if (grid_y >= 0 && grid_y < GRID_ROWS && grid_x >= 0 && grid_x < GRID_COLS){
                     game_grid[grid_y][grid_x] = tet.color;
                 }
             }
@@ -647,22 +647,23 @@ void handle_user_input(){
 }
 
 /**
- * @brief Main game logic. It handles the time of the game and the next step (such as next y coordinate, user input, tetromino drawing, deleting and drawing).
+ * @brief Main game logic. It handles the time of the game and the next step (such as next y coordinate, user input, tetromino drawing and deleting).
  * @return void
 */
-void perform_game_tick() {
+void perform_game_tick(){
     handle_user_input(); // race conditions
     int next_y = falling_tetromino.pos_y + (falling_tetromino.drop_speed*TETROMINO_UNIT_BLOCK_SIZE); //spec5
 
-    if (!check_collision(falling_tetromino, falling_tetromino.pos_x, next_y)) {
+    if(!check_collision(falling_tetromino, falling_tetromino.pos_x, next_y)){
         delete_tetromino(falling_tetromino);
         falling_tetromino.pos_y = next_y;
         draw_tetromino(falling_tetromino);
 
-    } else {
+    }
+    else{
         // di 2 non puo scendere, ma di 1?
         int single_step_y = falling_tetromino.pos_y + TETROMINO_UNIT_BLOCK_SIZE;
-        while (!check_collision(falling_tetromino, falling_tetromino.pos_x, falling_tetromino.pos_y + TETROMINO_UNIT_BLOCK_SIZE)) {
+        while (!check_collision(falling_tetromino, falling_tetromino.pos_x, falling_tetromino.pos_y + TETROMINO_UNIT_BLOCK_SIZE)){
             delete_tetromino(falling_tetromino);
             falling_tetromino.pos_y += TETROMINO_UNIT_BLOCK_SIZE; // incremento finchè non c'è collisione - max 2
         }

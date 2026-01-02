@@ -45,6 +45,7 @@
 #define TETROMINO_FULL_WIDTH (4 * TETROMINO_UNIT_BLOCK_SIZE)
 #define TETROMINO_FULL_HEIGTH (4 * TETROMINO_UNIT_BLOCK_SIZE)
 
+// default SHAPES 
 #define TET_I 0
 #define TET_O 1
 #define TET_T 2
@@ -53,6 +54,7 @@
 #define TET_L 5
 #define TET_J 6
 
+// rotated SHAPES
 #define TET_I_90 7
 #define TET_T_90 8
 #define TET_T_180 9 
@@ -66,6 +68,7 @@
 #define TET_J_180 17
 #define TET_J_270 18
 
+// move requested - see RIT_IRQHandler
 #define MOVE_LEFT 10
 #define MOVE_RIGHT 11
 #define MOVE_NONE 12
@@ -73,12 +76,12 @@
 #define MOVE_UP 14
 #define MOVE_HARD_DROP 15
 
-
-#define NORMAL_DROP_SPEED 1 // 1 block per second
-#define SOFT_DROP_SPEED 2 // 2 blocks per second
+// DROP speeds
+#define NORMAL_DROP_SPEED 1 // block per second (game tick)
+#define SOFT_DROP_SPEED 2 // blocks per second (game tick)
 #define TETRIS_BONUS 600
 
-// TETROMINOS
+// TETROMINOES
 typedef struct{
     int shape;
     int pos_x;
@@ -90,7 +93,6 @@ typedef struct{
 
 
 Tetromino_t generate_tetromino();
-bool is_falling_tetromino(Tetromino_t tetromino);
 void handle_user_input();
 void perform_game_tick();
 void delete_tetromino(Tetromino_t tet);
@@ -100,13 +102,11 @@ void lock_tetromino(Tetromino_t tet);
 void rotate_falling_tetromino();
 
 
-
 // UTILS
 void print_screen(uint16_t Xpos, uint16_t Ypos, char* str, uint16_t Color, uint16_t bkColor);
 void print_or_delete_paused_text();
 void print_or_delete_game_over_text();
 void reset_game();
-
 
 
 /* LEADERBOARD*/
@@ -122,6 +122,5 @@ void reset_total_lines();
 /* GAME FIELD */
 void init_game_field();
 void draw_tetromino(Tetromino_t tetromino);
-// void redraw_game_field();
 void clear_line(int row);
 void draw_rect(int x, int y, int width, int height, uint16_t color);
